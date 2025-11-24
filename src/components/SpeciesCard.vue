@@ -1,5 +1,9 @@
 <template>
-  <div class="card" :style="{ borderColor: groupColor }">
+  <div
+    class="card"
+    :style="{ borderColor: groupColor, backgroundColor: groupBackgroundColor }"
+    :class="[`card--group-${currentGroup}`]"
+  >
     <div v-if="loading" class="card-loading">
       <p>{{ $t('loading') }}</p>
     </div>
@@ -13,8 +17,9 @@
 
     <div v-else class="card-content">
       <!-- Taxon Name Ribbon -->
-      <div class="ribbon" :style="{ backgroundColor: groupColor }">
-        {{ cardData.taxonName }}
+      <div class="ribbon ribbon-with-emoji" :style="{ backgroundColor: groupColor }">
+        <span class="taxon-name">{{ cardData.taxonName }}</span>
+        <span class="group-emoji">{{ groupEmoji }}</span>
       </div>
 
       <!-- Common Name Row -->
@@ -85,7 +90,7 @@
 import { ref, onMounted, watch, computed } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { fetchCardData } from '@/utils/fetchCardData'
-import { getGroupColor } from '@/data/constants'
+import { getGroupColor, getGroupBackgroundColor, getGroupEmoji } from '@/utils/assessBioGroup'
 import { useSettingsStore } from '@/stores/settings'
 
 const props = defineProps({
@@ -104,7 +109,15 @@ const settings = useSettingsStore()
 const cardData = ref(null)
 const loading = ref(true)
 const error = ref(null)
-const groupColor = ref(getGroupColor(props.group))
+
+// Use assessed group from API data when available, otherwise fall back to prop
+const currentGroup = computed(() => {
+  return cardData.value?.assessedGroup || props.group || 'unknown'
+})
+
+const groupColor = computed(() => getGroupColor(currentGroup.value))
+const groupBackgroundColor = computed(() => getGroupBackgroundColor(currentGroup.value))
+const groupEmoji = computed(() => getGroupEmoji(currentGroup.value))
 
 const wikipediaUrl = computed(() => {
   if (!cardData.value?.binomialName) return '#'
@@ -146,7 +159,8 @@ watch(locale, () => {
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   transition:
     transform 0.2s,
-    box-shadow 0.2s;
+    box-shadow 0.2s,
+    background-color 0.3s;
   display: flex;
   flex-direction: column;
   max-width: 400px;
@@ -186,6 +200,32 @@ watch(locale, () => {
   font-weight: 700;
   padding: 0.75rem 1rem;
   text-align: center;
+}
+
+.ribbon-with-emoji {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  text-align: left;
+}
+
+.taxon-name {
+  flex: 1;
+  text-align: center;
+}
+
+.group-emoji {
+  font-size: 1.2em;
+  margin-left: 0.5rem;
+  flex-shrink: 0;
+  border-radius: 50%;
+  background: #ffffffbb;
+  padding: 0.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2em;
+  height: 2em;
 }
 
 .ribbon-label {

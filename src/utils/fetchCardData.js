@@ -4,6 +4,8 @@
  * @param {string} locale - The language code (en, fr, es, zh)
  * @returns {Promise<Object>} Species data including taxon name, images, and descriptions
  */
+import { assessGroupMembership } from './assessBioGroup.js'
+
 export async function fetchCardData(binomialName, locale = 'en') {
   try {
     // Clean binomial name (remove parenthetical notes)
@@ -15,6 +17,9 @@ export async function fetchCardData(binomialName, locale = 'en') {
     // Fetch long description from Wikipedia
     const longDescription = await fetchWikipediaDescription(cleanName, locale)
 
+    // Assess the biological group
+    const assessedGroup = await assessGroupMembership(cleanName, locale)
+
     return {
       binomialName: cleanName,
       taxonName: wikidataData.taxonName || cleanName,
@@ -24,6 +29,7 @@ export async function fetchCardData(binomialName, locale = 'en') {
       shortDescription: wikidataData.description || null,
       longDescription: longDescription || null,
       wikidataId: wikidataData.id || null,
+      assessedGroup: assessedGroup, // Add the assessed group
     }
   } catch (error) {
     console.error(`Error fetching data for ${binomialName}:`, error)
@@ -36,6 +42,7 @@ export async function fetchCardData(binomialName, locale = 'en') {
       shortDescription: null,
       longDescription: null,
       wikidataId: null,
+      assessedGroup: 'unknown', // Default fallback
     }
   }
 }
@@ -163,7 +170,6 @@ async function fetchWikipediaDescription(binomialName, locale = 'en') {
     toRemove.forEach((element) => element.remove())
 
     // Find first paragraph in mw-parser-output
-    const shortDescription = doc.querySelector('.mw-parser-output header p')
     const firstParagraph = doc.querySelector('.mw-parser-output section > p')
 
     if (firstParagraph) {
