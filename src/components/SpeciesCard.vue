@@ -49,12 +49,36 @@
         </div>
         <div class="description-content" v-html="cardData.longDescription"></div>
       </div>
+
+      <!-- Card Footer -->
+      <div class="card-footer">
+        <a
+          :href="wikipediaUrl"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="footer-link"
+          title="View on Wikipedia"
+        >
+          <img src="/assets/wikipedia.svg" alt="Wikipedia" class="footer-icon" />
+        </a>
+
+        <a
+          v-if="cardData.wikidataId"
+          :href="`https://www.wikidata.org/wiki/${cardData.wikidataId}`"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="footer-link"
+          title="View on Wikidata"
+        >
+          <img src="/assets/wikidata.svg" alt="Wikidata" class="footer-icon" />
+        </a>
+      </div>
     </div>
   </div>
 </template>
 
 <script setup>
-import { ref, onMounted, watch } from 'vue'
+import { ref, onMounted, watch, computed } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { fetchCardData } from '@/utils/fetchCardData'
 import { getGroupColor } from '@/data/constants'
@@ -77,6 +101,12 @@ const cardData = ref(null)
 const loading = ref(true)
 const error = ref(null)
 const groupColor = ref(getGroupColor(props.group))
+
+const wikipediaUrl = computed(() => {
+  if (!cardData.value?.binomialName) return '#'
+  const lang = locale.value || 'en'
+  return `https://${lang}.wikipedia.org/api/rest_v1/page/mobile-html/${encodeURIComponent(cardData.value.binomialName.replace(/ /g, '_'))}`
+})
 
 async function loadData() {
   loading.value = true
@@ -116,6 +146,7 @@ watch(locale, () => {
   display: flex;
   flex-direction: column;
   max-width: 400px;
+  height: 100%;
 }
 
 .card:hover {
@@ -137,6 +168,8 @@ watch(locale, () => {
 .card-content {
   display: flex;
   flex-direction: column;
+  height: 100%;
+  min-height: 0;
 }
 
 .ribbon {
@@ -183,6 +216,7 @@ watch(locale, () => {
 .long-description {
   display: flex;
   flex-direction: column;
+  flex-grow: 1;
 }
 
 .description-content {
@@ -191,6 +225,7 @@ watch(locale, () => {
   line-height: 1.6;
   color: #333;
   background-color: #f9f9f9;
+  flex-grow: 1;
 }
 
 .short-description .description-content {
@@ -224,5 +259,48 @@ watch(locale, () => {
 .description-content :deep(sup) {
   font-size: 0.75em;
   vertical-align: super;
+}
+
+.card-footer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.75rem 1rem;
+  background-color: #f0f0f0;
+  border-top: 1px solid #e0e0e0;
+  flex-shrink: 0;
+}
+
+.footer-link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.25rem;
+  border-radius: 4px;
+  transition:
+    background-color 0.2s ease,
+    transform 0.2s ease;
+  text-decoration: none;
+}
+
+.footer-link:hover {
+  background-color: rgba(0, 0, 0, 0.05);
+  transform: scale(1.05);
+}
+
+.footer-link:focus {
+  outline: 2px solid #36c;
+  outline-offset: 2px;
+}
+
+.footer-icon {
+  width: 24px;
+  opacity: 0.7;
+  transition: opacity 0.2s ease;
+}
+
+.footer-link:hover .footer-icon {
+  opacity: 1;
 }
 </style>
