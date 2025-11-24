@@ -1,5 +1,6 @@
 <script setup>
 import TopBar from './components/TopBar.vue'
+import AppFooter from './components/AppFooter.vue'
 </script>
 
 <template>
@@ -8,6 +9,7 @@ import TopBar from './components/TopBar.vue'
     <main>
       <router-view />
     </main>
+    <AppFooter />
   </div>
 </template>
 

@@ -1,4 +1,4 @@
-export const locales = ['en', 'fr', 'es', 'zh', 'ko']
+export const locales = ['en', 'fr', 'es', 'zh']
 
 export const biolist = [
   { binomial: 'Canis lupus familiaris', group: 'mammal' },
