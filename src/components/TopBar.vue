@@ -2,8 +2,8 @@
   <header class="topbar">
     <div class="topbar-container">
       <router-link to="/" class="topbar-title">
-        <h1>{{ $t('gardenSpecies') }}</h1>
-        <p class="tagline">{{ $t('tagline') }}</p>
+        <h1>{{ $t('app-title') }}</h1>
+        <p class="tagline">{{ $t('app-tagline') }}</p>
       </router-link>
 
       <div class="topbar-actions">
@@ -12,7 +12,7 @@
 
         <EditData />
 
-        <router-link to="/settings" class="settings-button" :title="$t('settings')">
+        <router-link to="/settings" class="settings-button" :title="$t('settings-title')">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             xmlns:xlink="http://www.w3.org/1999/xlink"

@@ -4,7 +4,7 @@
     target="_blank"
     rel="noopener noreferrer"
     class="edit-data-button"
-    :title="hasUsername ? $t('editSpeciesListLoggedIn') : $t('editSpeciesListLoggedOut')"
+    :title="hasUsername ? $t('link-edit-list-logged-in') : $t('link-edit-list-logged-out')"
   >
     <svg
       xmlns="http://www.w3.org/2000/svg"

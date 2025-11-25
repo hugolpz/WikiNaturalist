@@ -5,7 +5,7 @@
     :class="[`card--group-${currentGroup}`]"
   >
     <div v-if="loading" class="card-loading">
-      <p>{{ $t('loading') }}</p>
+      <p>{{ $t('status-loading') }}</p>
     </div>
 
     <div v-else-if="error" class="card-error">
@@ -30,7 +30,7 @@
       <!-- Image Section -->
       <div v-if="settings.showTaxonImage && cardData.image" class="image-section">
         <div class="ribbon ribbon-label" :style="{ backgroundColor: groupColor }">
-          {{ $t('image') }}
+          {{ $t('settings-visibility-taxon-image') }}
         </div>
         <img :src="cardData.image" :alt="cardData.taxonName" class="image" />
       </div>
@@ -38,7 +38,7 @@
       <!-- Range Map Section -->
       <div v-if="settings.showTaxonRange && cardData.rangeMap" class="image-section">
         <div class="ribbon ribbon-label" :style="{ backgroundColor: groupColor }">
-          {{ $t('range') }}
+          {{ $t('settings-visibility-taxon-range') }}
         </div>
         <img :src="cardData.rangeMap" :alt="`Range of ${cardData.taxonName}`" class="image" />
       </div>
@@ -46,15 +46,26 @@
       <!-- Short Description -->
       <div v-if="cardData.shortDescription" class="short-description">
         <div class="ribbon ribbon-label" :style="{ backgroundColor: groupColor }">
-          {{ $t('shortDescription') }}
+          {{ $t('settings-visibility-short-description') }}
         </div>
         <div class="description-content">{{ cardData.shortDescription }}</div>
+      </div>
+
+      <!-- Medium Description -->
+      <div
+        v-if="settings.showMediumDescription && cardData.mediumDescription"
+        class="medium-description"
+      >
+        <div class="ribbon ribbon-label" :style="{ backgroundColor: groupColor }">
+          {{ $t('settings-visibility-medium-description') }}
+        </div>
+        <div class="description-content">{{ cardData.mediumDescription }}</div>
       </div>
 
       <!-- Long Description -->
       <div v-if="settings.showLongDescription && cardData.longDescription" class="long-description">
         <div class="ribbon ribbon-label" :style="{ backgroundColor: groupColor }">
-          {{ $t('longDescription') }}
+          {{ $t('settings-visibility-long-description') }}
         </div>
         <div class="description-content" v-html="cardData.longDescription"></div>
       </div>
@@ -66,7 +77,7 @@
           target="_blank"
           rel="noopener noreferrer"
           class="footer-link"
-          :title="$t('viewOnWikipedia')"
+          :title="$t('link-wikipedia')"
         >
           <img src="/assets/wikipedia.svg" alt="Wikipedia" class="footer-icon" />
         </a>
@@ -77,7 +88,7 @@
           target="_blank"
           rel="noopener noreferrer"
           class="footer-link"
-          :title="$t('viewOnWikidata')"
+          :title="$t('link-wikidata')"
         >
           <img src="/assets/wikidata.svg" alt="Wikidata" class="footer-icon" />
         </a>
@@ -133,7 +144,7 @@ async function loadData() {
     const data = await fetchCardData(props.binomialName, locale.value)
     cardData.value = data
   } catch (err) {
-    error.value = t('failedToLoadSpeciesData')
+    error.value = t('status-loading-list-error')
     console.error(err)
   } finally {
     loading.value = false
@@ -257,6 +268,7 @@ watch(locale, () => {
 }
 
 .short-description,
+.medium-description,
 .long-description {
   display: flex;
   flex-direction: column;

@@ -5,7 +5,7 @@
       v-model="username"
       type="text"
       class="username-input no-username"
-      :placeholder="$t('inputWikimediaUsername')"
+      :placeholder="$t('wikimedia-username-input-prompt')"
       @blur="handleBlur"
       @focus="startEditing"
     />

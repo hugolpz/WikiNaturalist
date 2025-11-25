@@ -4,7 +4,7 @@
  * @param {string} locale - The language code (en, fr, es, zh)
  * @returns {Promise<Object>} Species data including taxon name, images, and descriptions
  */
-import { assessGroupMembership } from './assessBioGroup.js'
+import { assessGroupMembershipWP } from './assessBioGroupNLP.js'
 
 export async function fetchCardData(binomialName, locale = 'en') {
   try {
@@ -15,10 +15,10 @@ export async function fetchCardData(binomialName, locale = 'en') {
     const wikidataData = await fetchWikidataInfo(cleanName, locale)
 
     // Fetch long description from Wikipedia
-    const longDescription = await fetchWikipediaDescription(cleanName, locale)
+    const wikipediaData = await fetchWikipediaDescription(cleanName, locale)
 
     // Assess the biological group
-    const assessedGroup = await assessGroupMembership(cleanName, locale)
+    const assessedGroup = await assessGroupMembershipWP(cleanName, 'en')
 
     return {
       binomialName: cleanName,
@@ -27,7 +27,9 @@ export async function fetchCardData(binomialName, locale = 'en') {
       image: wikidataData.image || null,
       rangeMap: wikidataData.rangeMap || null,
       shortDescription: wikidataData.description || null,
-      longDescription: longDescription || null,
+      mediumDescription: wikipediaData?.mediumDescription || null,
+      longDescription: wikipediaData?.firstParagraph || null,
+      infobox: wikipediaData?.infobox || null,
       wikidataId: wikidataData.id || null,
       assessedGroup: assessedGroup, // Add the assessed group
     }
@@ -40,7 +42,9 @@ export async function fetchCardData(binomialName, locale = 'en') {
       image: null,
       rangeMap: null,
       shortDescription: null,
+      mediumDescription: null,
       longDescription: null,
+      infobox: null,
       wikidataId: null,
       assessedGroup: 'unknown', // Default fallback
     }
@@ -148,9 +152,27 @@ function getCommonsImageUrl(filename) {
 }
 
 /**
+ * Edits href attributes in DOM elements that match a pattern
+ * @param {Element} element - The DOM element to search within
+ * @param {RegExp} match - The regex pattern to match against href values
+ * @param {string} replacement - The replacement string for matching hrefs
+ */
+function editHrefs(element, match, replacement) {
+  if (!element) return
+
+  const links = element.querySelectorAll('a[href]')
+  links.forEach((link) => {
+    const href = link.getAttribute('href')
+    if (href && match.test(href)) {
+      link.setAttribute('href', href.replace(match, replacement))
+    }
+  })
+}
+
+/**
  * Fetches Wikipedia article introduction with HTML formatting
  */
-async function fetchWikipediaDescription(binomialName, locale = 'en') {
+export async function fetchWikipediaDescription(binomialName, locale = 'en') {
   try {
     const url = `https://${locale}.wikipedia.org/api/rest_v1/page/mobile-html/${encodeURIComponent(binomialName)}`
 
@@ -164,20 +186,24 @@ async function fetchWikipediaDescription(binomialName, locale = 'en') {
     // Parse HTML and extract first paragraph
     const parser = new DOMParser()
     const doc = parser.parseFromString(html, 'text/html')
-
     // Remove .noexcerpt elements
     const toRemove = doc.querySelectorAll('.noexcerpt, .mw-empty-elt')
     toRemove.forEach((element) => element.remove())
+    const mediumDescription =
+      doc.querySelector('#pcs-edit-section-title-description')?.textContent ?? ''
+    const introduction = doc.querySelector('[data-mw-section-id="0"]')
 
-    // Find first paragraph in mw-parser-output
-    const firstParagraph = doc.querySelector('.mw-parser-output section > p')
+    // Fix relative links in the introduction section
+    editHrefs(introduction, /^\.\//, `https://${locale}.wikipedia.org/wiki/`)
 
-    if (firstParagraph) {
-      // Return HTML content with inline elements preserved
-      return firstParagraph.innerHTML
+    const firstParagraph = introduction?.querySelector('.mw-parser-output section > p')?.innerHTML,
+      infobox = introduction?.querySelector('.infobox')?.textContent?.trim() ?? ''
+
+    return {
+      mediumDescription,
+      firstParagraph,
+      infobox,
     }
-
-    return null
   } catch (error) {
     console.error('Error fetching Wikipedia description:', error)
     return null

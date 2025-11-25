@@ -2,41 +2,43 @@
   <div class="settings-view">
     <div class="settings-container">
       <div class="settings-header">
-        <h2>{{ $t('settings') }}</h2>
-        <router-link to="/" class="back-button"> ← {{ $t('backToGallery') }} </router-link>
+        <h2>{{ $t('settings-title') }}</h2>
+        <router-link to="/" class="back-button">
+          ← {{ $t('navigation-back-to-gallery') }}
+        </router-link>
       </div>
 
       <div class="settings-section">
-        <h3>{{ $t('wikimediaIntegration') }}</h3>
-        <p class="settings-description">{{ $t('wikimediaDescription') }}</p>
+        <h3>{{ $t('wikimedia-integration-title') }}</h3>
+        <p class="settings-description">{{ $t('wikimedia-integration-description') }}</p>
 
         <div class="username-input">
           <label for="wikimedia-username" class="input-label">
-            {{ $t('wikimediaUsername') }}:
+            {{ $t('wikimedia-username-label') }}:
           </label>
           <input
             id="wikimedia-username"
             v-model="settings.wikimediaUsername"
             type="text"
             class="username-field"
-            :placeholder="$t('wikimediaUsernamePlaceholder')"
+            :placeholder="$t('wikimedia-username-placeholder')"
           />
         </div>
       </div>
 
       <div class="settings-section">
-        <h3>{{ $t('visibilitySettings') }}</h3>
-        <p class="settings-description">{{ $t('visibilityDescription') }}</p>
+        <h3>{{ $t('settings-visibility-title') }}</h3>
+        <p class="settings-description">{{ $t('settings-visibility-description') }}</p>
 
         <div class="settings-options">
           <label class="setting-option">
             <input v-model="settings.showTaxonImage" type="checkbox" class="setting-checkbox" />
-            <span class="setting-label">{{ $t('showTaxonImage') }}</span>
+            <span class="setting-label">{{ $t('settings-visibility-taxon-image') }}</span>
           </label>
 
           <label class="setting-option">
             <input v-model="settings.showTaxonRange" type="checkbox" class="setting-checkbox" />
-            <span class="setting-label">{{ $t('showTaxonRange') }}</span>
+            <span class="setting-label">{{ $t('settings-visibility-taxon-range') }}</span>
           </label>
 
           <label class="setting-option">
@@ -45,7 +47,16 @@
               type="checkbox"
               class="setting-checkbox"
             />
-            <span class="setting-label">{{ $t('showConservationStatus') }}</span>
+            <span class="setting-label">{{ $t('settings-visibility-conservation-status') }}</span>
+          </label>
+
+          <label class="setting-option">
+            <input
+              v-model="settings.showMediumDescription"
+              type="checkbox"
+              class="setting-checkbox"
+            />
+            <span class="setting-label">{{ $t('settings-visibility-medium-description') }}</span>
           </label>
 
           <label class="setting-option">
@@ -54,13 +65,13 @@
               type="checkbox"
               class="setting-checkbox"
             />
-            <span class="setting-label">{{ $t('showLongDescription') }}</span>
+            <span class="setting-label">{{ $t('settings-visibility-long-description') }}</span>
           </label>
         </div>
       </div>
 
       <div class="settings-footer">
-        <p class="info-text">{{ $t('settingsSaved') }}</p>
+        <p class="info-text">{{ $t('settings-auto-saved-message') }}</p>
       </div>
     </div>
   </div>
