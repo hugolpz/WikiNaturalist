@@ -2,6 +2,41 @@
 export const validGroups = [
   // Kingdom Animalia Classes (Most specific first)
   {
+    group: 'plant',
+    emoji: '🌿',
+    phylogeny: 'Plantae',
+    qid: 'Q756',
+    color_code: '#88DD88FF',
+    explainer:
+      'General category for organisms that photosynthesize. Used as a fallback for non-woody, non-grass plants.',
+  },
+  {
+    group: 'grass',
+    emoji: '🌾', // 🌾☘️🌱
+    phylogeny: 'Plantae',
+    qid: 'Q34723',
+    color_code: '#CCFFCC',
+    explainer:
+      'Non-woody plants, often small or flexible-stemmed. (Includes true grasses, wildflowers, shrubs, ferns).',
+  },
+  {
+    group: 'tree',
+    emoji: '🌳', //🌲🌳🌴🍁
+    phylogeny: 'Plantae',
+    qid: 'Q7541',
+    color_code: '#55BB55FF',
+    explainer: 'Large, woody, perennial plants with a single stem or trunk.',
+  },
+  {
+    group: 'fungi',
+    emoji: '🍄', // 🍄‍🟫
+    phylogeny: 'Fungi',
+    qid: 'Q7705',
+    color_code: '#E0E0A0FF',
+    explainer:
+      'Non-photosynthetic organisms that reproduce via spores. (Includes Mushroom, molds, yeasts).',
+  },
+  {
     group: 'mammal',
     emoji: '🐘', // 🐂🐎🦬🐀🐖🐒🐅🐕🐺🦭
     phylogeny: 'Mammalia',
@@ -87,41 +122,6 @@ export const validGroups = [
     qid: 'Q34091',
     color_code: '#FFDDAA',
     explainer: 'Catch-all for other animals without backbones (e.g., worms, jellyfish, starfish).',
-  },
-  {
-    group: 'plant',
-    emoji: '🌿',
-    phylogeny: 'Plantae',
-    qid: 'Q756',
-    color_code: '#88DD88FF',
-    explainer:
-      'General category for organisms that photosynthesize. Used as a fallback for non-woody, non-grass plants.',
-  },
-  {
-    group: 'grass',
-    emoji: '🌾', // 🌾☘️🌱
-    phylogeny: 'Plantae',
-    qid: 'Q34723',
-    color_code: '#CCFFCC',
-    explainer:
-      'Non-woody plants, often small or flexible-stemmed. (Includes true grasses, wildflowers, shrubs, ferns).',
-  },
-  {
-    group: 'tree',
-    emoji: '🌳', //🌲🌳🌴🍁
-    phylogeny: 'Plantae',
-    qid: 'Q7541',
-    color_code: '#55BB55FF',
-    explainer: 'Large, woody, perennial plants with a single stem or trunk.',
-  },
-  {
-    group: 'fungi',
-    emoji: '🍄', // 🍄‍🟫
-    phylogeny: 'Fungi',
-    qid: 'Q7705',
-    color_code: '#E0E0A0FF',
-    explainer:
-      'Non-photosynthetic organisms that reproduce via spores. (Includes Mushroom, molds, yeasts).',
   },
   {
     group: 'unknown',

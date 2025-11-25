@@ -4,22 +4,53 @@ import { fetchWikipediaDescription } from './fetchCardData.js'
 var groups = validGroups.map((g) => g.group)
 
 /**
+ * Searches for phylogeny terms in infobox with full word matching
+ * @param {string} infobox - The infobox text to search within
+ * @returns {string|null} - The first matched phylogeny term or null if none found
+ */
+function findPhylogenyInInfobox(infobox) {
+  if (!infobox) return null
+
+  // Get all phylogeny terms from validGroups
+  const phylogenies = validGroups.map((g) => g.phylogeny)
+
+  // Search for each phylogeny term with full word matching
+  for (const phylogeny of phylogenies) {
+    // Use word boundaries for exact word matching, case insensitive
+    const regex = new RegExp(`\\b${phylogeny}\\b`, 'i')
+
+    if (regex.test(infobox)) {
+      console.log(`Found phylogeny "${phylogeny}" in infobox (full word match)`)
+      return phylogeny
+    }
+  }
+
+  return null
+}
+
+/**
  * Counts the occurrences of a list of target words within a text.
  * @param {string[]} targetWords - The array of words to count (e.g., ["mammal", "bird"]).
  * @param {string} text - The text to search within.
+ * @param {boolean} caseSensitive - Whether to perform case-sensitive search (default: false).
  * @returns {object} - An object containing the most frequent word and its count, or null if no matches are found.
  */
-function getMostFrequentWord(targetWords, text) {
-  // 1. Normalize the text: convert to lowercase and remove punctuation
-  // We replace non-word characters (except spaces) with a space, then split by whitespace.
-  const normalizedText = text.toLowerCase()
+function getMostFrequentWord(targetWords, text, caseSensitive = false) {
+  if (!text) return { word: null, count: 0, allCounts: {} }
+
+  // 1. Normalize the text based on case sensitivity
+  const normalizedText = caseSensitive ? text : text.toLowerCase()
+  const normalizedTargets = caseSensitive
+    ? targetWords
+    : targetWords.map((word) => word.toLowerCase())
+
   const allWords = normalizedText
-    .replace(/[^a-z\s]/g, ' ') // Replace non-alphabetic/non-space with space
+    .replace(/[^a-zA-Z\s]/g, ' ') // Replace non-alphabetic/non-space with space
     .split(/\s+/) // Split by one or more whitespace characters
     .filter((word) => word.length > 0) // Remove empty strings from splitting
 
   // 2. Create a set of the target words for fast lookup
-  const targetSet = new Set(targetWords.map((word) => word.toLowerCase()))
+  const targetSet = new Set(normalizedTargets)
 
   // 3. Initialize a frequency map
   const frequency = {}
@@ -41,18 +72,10 @@ function getMostFrequentWord(targetWords, text) {
   }
 
   // 6. Return the result
-  if (mostFrequentWord) {
-    return {
-      word: mostFrequentWord,
-      count: maxCount,
-      allCounts: frequency,
-    }
-  } else {
-    return {
-      word: null,
-      count: 0,
-      allCounts: frequency,
-    }
+  return {
+    word: mostFrequentWord,
+    count: maxCount,
+    allCounts: frequency,
   }
 }
 
@@ -68,26 +91,61 @@ export async function assessGroupMembershipWP(binomialName, locale = 'en') {
     }
 
     const { mediumDescription, firstParagraph, infobox } = wikipediaData
-
     const fulltext = [mediumDescription, firstParagraph, infobox].filter(Boolean).join(' ')
 
-    // --- Execution ---
-    const isInDescription = getMostFrequentWord(groups, mediumDescription || '').word
-    const isInInfobox = getMostFrequentWord(groups, infobox || '').word
-    const isInAll = getMostFrequentWord(groups, fulltext).word
-    const group = isInDescription || isInInfobox || isInAll
+    console.log(`--- Analyzing ${binomialName} ---`)
 
-    // --- Output ---
-    const result = getMostFrequentWord(groups, fulltext)
-    console.log('--- Word Occurrence Count ---')
-    console.log(`Text searched for: ${groups.join(', ')}`)
-    console.log('All counts:', result.allCounts)
-    console.log(`Most frequent word: "${result.word}" with ${result.count} occurrence(s).`)
-    console.log(`Selected group: ${group}`)
+    // Step 1: Look for phylogeny terms in infobox with full word matching
+    const foundPhylogeny = findPhylogenyInInfobox(infobox)
 
-    return group
+    if (foundPhylogeny) {
+      // Find the group that matches this phylogeny
+      const matchedGroup = validGroups.find(
+        (g) => g.phylogeny.toLowerCase() === foundPhylogeny.toLowerCase(),
+      )
+
+      if (matchedGroup) {
+        console.log(`Matched phylogeny "${foundPhylogeny}" to group: ${matchedGroup.group}`)
+
+        // Step 2: If it's Plantae, do secondary search for tree/grass
+        if (matchedGroup.group === 'plant') {
+          console.log('Detected Plantae - searching for specific plant types...')
+
+          const plantSpecificGroups = ['tree', 'grass']
+          const plantResult = getMostFrequentWord(plantSpecificGroups, fulltext, false)
+
+          if (plantResult.word) {
+            console.log(
+              `Found specific plant type: "${plantResult.word}" (${plantResult.count} occurrences)`,
+            )
+            return plantResult.word
+          } else {
+            console.log('No specific plant type found, defaulting to "plant"')
+            return 'plant'
+          }
+        } else {
+          // Return the matched group directly
+          return matchedGroup.group
+        }
+      }
+    }
+
+    // Step 3: Fallback to original group-based search in full text
+    console.log('No phylogeny found in infobox, falling back to group search in full text')
+    const groupResult = getMostFrequentWord(groups, fulltext, false)
+
+    if (groupResult.word) {
+      console.log(
+        `Found group "${groupResult.word}" in full text (${groupResult.count} occurrences)`,
+      )
+      return groupResult.word
+    }
+
+    // Step 4: Final fallback
+    console.log('No groups found, defaulting to "unknown"')
+    return 'unknown'
   } catch (error) {
     console.error('Error analyzing species:', error)
-    return null
+    return 'unknown'
   }
 }
