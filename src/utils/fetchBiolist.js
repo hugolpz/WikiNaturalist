@@ -2,7 +2,7 @@ import { biolist as defaultBiolist } from '@/data/constants'
 
 /**
  * Fetches the user's custom biolist from Wikimedia if available
- * @returns {Promise<Array>} The biolist array (custom or default)
+ * @returns {Promise<Array>} The biolist array (custom places data or default biolist wrapped)
  */
 export async function fetchBiolist() {
   try {
@@ -11,24 +11,48 @@ export async function fetchBiolist() {
 
     if (!username) {
       console.log('No Wikimedia username found, using default biolist')
-      return defaultBiolist
+      // Wrap default biolist in place format for consistency
+      return [
+        {
+          place: 'Default Species List',
+          lat: null,
+          lon: null,
+          list: defaultBiolist,
+        },
+      ]
     }
 
     console.log(`Found Wikimedia username: ${username}`)
 
-    // Try to fetch the user's custom biolist
-    const customBiolist = await fetchUserBiolist(username)
+    // Try to fetch the user's custom biolist (place-based format)
+    const customPlacesData = await fetchUserBiolist(username)
 
-    if (customBiolist) {
-      console.log('Using custom biolist from Wikimedia')
-      return customBiolist
+    if (customPlacesData) {
+      console.log('Using custom place-based biolist from Wikimedia')
+      return customPlacesData
     }
 
     console.log('No valid custom biolist found, using default')
-    return defaultBiolist
+    // Wrap default biolist in place format for consistency
+    return [
+      {
+        place: 'Default Species List',
+        lat: null,
+        lon: null,
+        list: defaultBiolist,
+      },
+    ]
   } catch (error) {
     console.error('Error fetching biolist:', error)
-    return defaultBiolist
+    // Wrap default biolist in place format for consistency
+    return [
+      {
+        place: 'Default Species List',
+        lat: null,
+        lon: null,
+        list: defaultBiolist,
+      },
+    ]
   }
 }
 
@@ -97,13 +121,12 @@ async function fetchUserBiolist(username) {
       console.log(`Page ${pageTitle} does not exist`)
       return null
     }
-
     const wikitext = data.parse.wikitext['*']
 
-    // Try to extract JSON from the wikitext
-    const biolist = parseWikitextBiolist(wikitext)
+    // Use place-based parsing format
+    const placesData = parseWikitextPlaceBasedBiolist(wikitext)
 
-    return biolist
+    return placesData
   } catch (error) {
     console.error('Error fetching user biolist:', error)
     return null
@@ -111,60 +134,91 @@ async function fetchUserBiolist(username) {
 }
 
 /**
- * Parses wikitext to extract biolist JSON
+ * Parses wikitext in place-based format to extract place-based biolist data
+ * Expected format:
+ * == Placename 1 ==
+ * * { lat: 04.8 , lon: 86.8 }
+ * * Metepeira labyrinthea
+ * * Canis lupus familiaris
+ *
+ * == Placename 2 ==
+ * * { lat: 04.8 , lon: 86.8 }
+ * * Vulpes vulpes
+ * * Pica pica
+ *
  * @param {string} wikitext - The raw wikitext content
- * @returns {Array|null} The parsed biolist or null if invalid
+ * @returns {Array|null} Array of place objects with structure: { place, lat, lon, list } or null if invalid
  */
-function parseWikitextBiolist(wikitext) {
+function parseWikitextPlaceBasedBiolist(wikitext) {
   try {
-    // Try to find JSON in the wikitext
-    // Look for patterns like <syntaxhighlight>...</syntaxhighlight> or <pre>...</pre>
-    // or just raw JSON
-    let jsonText = wikitext
+    const regions = []
 
-    // Remove <syntaxhighlight> tags if present
-    jsonText = jsonText.replace(/<syntaxhighlight[^>]*>([\s\S]*?)<\/syntaxhighlight>/gi, '$1')
+    // Remove <syntaxhighlight>, <pre>, and <nowiki> tags if present
+    let cleanText = wikitext
+    // Split by == headers to get sections but preserve the matching strings
+    const sections = cleanText.split(/^==\s*(.+?)\s*==$/gm)
 
-    // Remove <pre> tags if present
-    jsonText = jsonText.replace(/<pre[^>]*>([\s\S]*?)<\/pre>/gi, '$1')
+    // Process sections (skip first empty element)
+    for (let i = 1; i < sections.length; i += 2) {
+      const placeName = sections[i].trim()
+      const content = sections[i + 1]
 
-    // Remove <nowiki> tags if present
-    jsonText = jsonText.replace(/<nowiki[^>]*>([\s\S]*?)<\/nowiki>/gi, '$1')
+      if (!content) continue
 
-    // Try to find JSON array in the text
-    const jsonMatch = jsonText.match(/\[\s*{[\s\S]*}\s*\]/m)
+      // Extract list items (lines starting with *)
+      const listItems = content
+        .split('\n')
+        .map((line) => line.trim())
+        .filter((line) => line.startsWith('*'))
+        .map((line) => line.substring(1).trim())
+        .filter((line) => line.length > 0)
 
-    if (jsonMatch) {
-      jsonText = jsonMatch[0]
+      if (listItems.length === 0) continue
+
+      // First item should be coordinates in format { lat: X, lon: Y }
+      const coordItem = listItems[0]
+      let lat = null
+      let lon = null
+      let itemList = []
+
+      // Try to parse coordinates from first item
+      const coordMatch = coordItem.match(
+        /\{\s*lat\s*:\s*([0-9.-]+)\s*,\s*lon\s*:\s*([0-9.-]+)\s*\}/,
+      )
+      if (coordMatch) {
+        lat = parseFloat(coordMatch[1])
+        lon = parseFloat(coordMatch[2])
+        // Species list starts from second item
+        itemList = listItems.slice(1)
+      } else {
+        // No coordinates found, treat all items as species
+        itemList = listItems
+      }
+
+      // Convert species list to biolist format
+      const biolist = itemList
+        .filter((species) => species.length > 0)
+        .map((species) => ({
+          binomial: species.trim(),
+        }))
+
+      // Only add place if it has species
+      if (biolist.length > 0) {
+        regions.push({
+          place: placeName,
+          lat: lat,
+          lon: lon,
+          list: biolist,
+        })
+      }
     }
 
-    // Parse the JSON
-    const parsed = JSON.parse(jsonText.trim())
-
-    // Validate that it's an array
-    if (!Array.isArray(parsed)) {
-      console.warn('Parsed biolist is not an array')
-      return null
-    }
-
-    // Validate that all items have the required keys
-    const isValid = parsed.every(
-      (item) =>
-        typeof item === 'object' &&
-        item !== null &&
-        'binomial' in item &&
-        typeof item.binomial === 'string',
-    )
-
-    if (!isValid) {
-      console.warn('Biolist items are missing required keys (binomial)')
-      return null
-    }
-
-    // Return the validated biolist
-    return parsed
+    return regions.length > 0 ? regions : null
   } catch (error) {
-    console.error('Error parsing wikitext biolist:', error)
+    console.error('Error parsing place-based wikitext biolist:', error)
     return null
   }
 }
+
+// Export the place-based parser for potential standalone use
+export { parseWikitextPlaceBasedBiolist }
