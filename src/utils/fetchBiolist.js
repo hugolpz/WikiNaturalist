@@ -153,13 +153,11 @@ function parseWikitextBiolist(wikitext) {
         typeof item === 'object' &&
         item !== null &&
         'binomial' in item &&
-        'group' in item &&
-        typeof item.binomial === 'string' &&
-        typeof item.group === 'string',
+        typeof item.binomial === 'string',
     )
 
     if (!isValid) {
-      console.warn('Biolist items are missing required keys (binomial, group)')
+      console.warn('Biolist items are missing required keys (binomial)')
       return null
     }
 

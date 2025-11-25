@@ -13,7 +13,7 @@
         v-for="species in biolist"
         :key="species.binomial"
         :binomial-name="species.binomial"
-        :group="species.group"
+        :group="species.group || 'unknown'"
       />
     </div>
   </div>

@@ -287,6 +287,7 @@ watch(locale, () => {
 .short-description .description-content {
   font-style: italic;
   font-weight: 500;
+  text-transform: capitalize;
 }
 
 .description-content p {

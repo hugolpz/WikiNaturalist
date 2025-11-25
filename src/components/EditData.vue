@@ -31,17 +31,17 @@ const hasUsername = computed(
 )
 
 const placeholderJson = `[
-  { binomial: 'Pica pica', group: 'bird' },
-  { binomial: 'Podarcis muralis', group: 'reptile' },
-  { binomial: 'Quercus robur', group: 'tree' },
-  { binomial: 'Erithacus rubecula', group: 'bird' },
-  { binomial: 'Corylus avellana', group: 'tree' },
-  { binomial: 'Ficus carica', group: 'tree' },
-  { binomial: 'Diospyros kaki', group: 'tree' },
-  { binomial: 'Quercus suber', group: 'tree' },
-  { binomial: 'Ilex aquifolium', group: 'tree' },
-  { binomial: 'Mespilus germanica', group: 'tree' },
-  { binomial: 'Prunus persica', group: 'tree' }
+  { "binomial": "Pica pica" },
+  { "binomial": "Podarcis muralis" },
+  { "binomial": "Quercus robur" },
+  { "binomial": "Erithacus rubecula" },
+  { "binomial": "Corylus avellana" },
+  { "binomial": "Ficus carica" },
+  { "binomial": "Diospyros kaki" },
+  { "binomial": "Quercus suber" },
+  { "binomial": "Ilex aquifolium" },
+  { "binomial": "Mespilus germanica" },
+  { "binomial": "Prunus persica" }
 ]`
 
 const editUrl = computed(() => {
