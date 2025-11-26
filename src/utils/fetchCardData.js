@@ -1,10 +1,10 @@
 /**
- * Fetches species data from Wikidata and Wikipedia
- * @param {string} binomialName - The binomial name of the species
+ * Fetches item data from Wikidata and Wikipedia
+ * @param {string} binomialName - The binomial name of the item
  * @param {string} locale - The language code (en, fr, es, zh)
- * @returns {Promise<Object>} Species data including taxon name, images, and descriptions
+ * @returns {Promise<Object>} Item data including taxon name, images, and descriptions
  */
-import { assessGroupMembershipWP } from './assessBioGroupNLP.js'
+import { assessCategoryMembershipWP } from './assessCategoryNLP.js'
 
 export async function fetchCardData(binomialName, locale = 'en') {
   try {
@@ -17,8 +17,8 @@ export async function fetchCardData(binomialName, locale = 'en') {
     // Fetch long description from Wikipedia
     const wikipediaData = await fetchWikipediaDescription(cleanName, locale)
 
-    // Assess the biological group
-    const assessedGroup = await assessGroupMembershipWP(cleanName, 'en')
+    // Assess the category
+    const assessedCategory = await assessCategoryMembershipWP(cleanName, 'en')
 
     return {
       binomialName: cleanName,
@@ -31,7 +31,7 @@ export async function fetchCardData(binomialName, locale = 'en') {
       longDescription: wikipediaData?.firstParagraph || null,
       infobox: wikipediaData?.infobox || null,
       wikidataId: wikidataData.id || null,
-      assessedGroup: assessedGroup, // Add the assessed group
+      assessedGroup: assessedCategory, // Add the assessed category
     }
   } catch (error) {
     console.error(`Error fetching data for ${binomialName}:`, error)
@@ -52,7 +52,7 @@ export async function fetchCardData(binomialName, locale = 'en') {
 }
 
 /**
- * Fetches Wikidata information for a species
+ * Fetches Wikidata information for an item
  */
 async function fetchWikidataInfo(binomialName, locale = 'en') {
   try {

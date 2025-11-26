@@ -1,21 +1,24 @@
 export const locales = ['en', 'fr', 'es', 'zh', 'ko']
 
-export const biolist = [
-  { binomial: 'Canis lupus familiaris', group: 'mammal' },
+export const datalist = [
+  { binomial: 'Canis lupus familiaris', category: 'mammal' },
   { binomial: 'Felis catus' },
-  { binomial: 'Pica pica', group: 'bird' },
-  { binomial: 'Podarcis muralis', group: 'reptile' },
-  { binomial: 'Quercus robur', group: 'tree' },
+  { binomial: 'Pica pica', category: 'bird' },
+  { binomial: 'Podarcis muralis', category: 'reptile' },
+  { binomial: 'Quercus robur', category: 'tree' },
   { binomial: 'Prunus avium' },
-  { binomial: 'Poa pratensis', group: 'grass' },
-  { binomial: 'Taraxacum officinale', group: 'plant' },
+  { binomial: 'Poa pratensis', category: 'grass' },
+  { binomial: 'Taraxacum officinale', category: 'plant' },
 ]
 
-// Re-export biological group functionality from centralized location
+// Re-export category functionality from centralized location
 export {
-  validGroups,
-  getGroupColor,
-  getGroupEmoji,
-  getGroupBackgroundColor,
-  getGroupInfo,
-} from '@/utils/assessBioGroup.js'
+  validCategories,
+  getCategoryColor,
+  getCategoryEmoji,
+  getCategoryBackgroundColor,
+  getCategoryInfo,
+} from '@/utils/assessCategory.js'
+
+// Legacy alias for backward compatibility
+export const biolist = datalist

@@ -8,25 +8,25 @@
       <p>{{ error }}</p>
     </div>
 
-    <div v-else class="places-container">
-      <div v-for="place in placesData" :key="place.place" class="place-section">
-        <!-- Place Header -->
-        <div class="place-header">
-          <h2 class="place-title">{{ place.place }}</h2>
-          <div v-if="place.lat && place.lon" class="place-coordinates">
+    <div v-else class="locations-container">
+      <div v-for="location in locationsData" :key="location.location" class="location-section">
+        <!-- Location Header -->
+        <div class="location-header">
+          <h2 class="location-title">{{ location.location }}</h2>
+          <div v-if="location.lat && location.lon" class="location-coordinates">
             <span class="coordinates">
-              📍 {{ place.lat.toFixed(3) }}, {{ place.lon.toFixed(3) }}
+              📍 {{ location.lat.toFixed(3) }}, {{ location.lon.toFixed(3) }}
             </span>
           </div>
         </div>
 
-        <!-- Species Grid for this place -->
+        <!-- Items Grid for this location -->
         <div class="gallery-grid">
-          <SpeciesCard
-            v-for="species in place.list"
-            :key="species.binomial"
-            :binomial-name="species.binomial"
-            :group="species.group || 'unknown'"
+          <ItemCard
+            v-for="item in location.list"
+            :key="item.binomial"
+            :binomial-name="item.binomial"
+            :group="item.category || item.group || 'unknown'"
           />
         </div>
       </div>
@@ -37,17 +37,17 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { fetchBiolist } from '@/utils/fetchBiolist'
-import SpeciesCard from '@/components/SpeciesCard.vue'
+import { fetchDatalist } from '@/utils/fetchDatalist'
+import ItemCard from '@/components/ItemCard.vue'
 
 const { t } = useI18n()
-const placesData = ref([])
+const locationsData = ref([])
 const loading = ref(true)
 const error = ref(null)
 
 onMounted(async () => {
   try {
-    placesData.value = await fetchBiolist()
+    locationsData.value = await fetchDatalist()
   } catch (err) {
     error.value = t('status-loading-list-error')
     console.error(err)
@@ -76,20 +76,20 @@ onMounted(async () => {
   color: #d33;
 }
 
-.places-container {
+.locations-container {
   display: flex;
   flex-direction: column;
   gap: 3rem;
 }
 
-.place-section {
+.location-section {
   background-color: #f8f9fa;
   border-radius: 12px;
   padding: 2rem;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
 }
 
-.place-header {
+.location-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -98,14 +98,14 @@ onMounted(async () => {
   border-bottom: 2px solid #e9ecef;
 }
 
-.place-title {
+.location-title {
   font-size: 1.75rem;
   font-weight: 700;
   color: #2c3e50;
   margin: 0;
 }
 
-.place-coordinates {
+.location-coordinates {
   display: flex;
   align-items: center;
 }
@@ -130,17 +130,17 @@ onMounted(async () => {
     padding: 1rem;
   }
 
-  .place-section {
+  .location-section {
     padding: 1.5rem;
   }
 
-  .place-header {
+  .location-header {
     flex-direction: column;
     align-items: flex-start;
     gap: 1rem;
   }
 
-  .place-title {
+  .location-title {
     font-size: 1.5rem;
   }
 
@@ -154,12 +154,12 @@ onMounted(async () => {
     padding: 0.5rem;
   }
 
-  .place-section {
+  .location-section {
     padding: 1rem;
     border-radius: 8px;
   }
 
-  .place-title {
+  .location-title {
     font-size: 1.25rem;
   }
 
