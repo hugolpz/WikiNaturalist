@@ -30,30 +30,12 @@ const hasUsername = computed(
   () => settings.wikimediaUsername && settings.wikimediaUsername.trim() !== '',
 )
 
-const placeholderJson = `[
-  { "binomial": "Pica pica" },
-  { "binomial": "Podarcis muralis" },
-  { "binomial": "Quercus robur" },
-  { "binomial": "Erithacus rubecula" },
-  { "binomial": "Corylus avellana" },
-  { "binomial": "Ficus carica" },
-  { "binomial": "Diospyros kaki" },
-  { "binomial": "Quercus suber" },
-  { "binomial": "Ilex aquifolium" },
-  { "binomial": "Mespilus germanica" },
-  { "binomial": "Prunus persica" }
-]`
-
 const editUrl = computed(() => {
   if (!hasUsername.value) {
     return 'https://meta.wikimedia.org/w/index.php?title=Special:UserLogin&returnto=Main+Page'
   }
-
   const username = settings.wikimediaUsername
-  const wrappedJson = `<syntaxhighlight lang="json">\n${placeholderJson}\n</syntaxhighlight>`
-  const encodedPreloadText = encodeURIComponent(wrappedJson)
-
-  return `https://meta.wikimedia.org/wiki/User:${encodeURIComponent(username)}/GardensHavens?action=edit&preloadtext=${encodedPreloadText}`
+  return `https://meta.wikimedia.org/w/index.php?title=User:${encodeURIComponent(username)}/GardensHavens&action=edit&editintro=User:Yug/Guideline&preload=User:Yug/Placeholder`
 })
 </script>
 
