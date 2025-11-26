@@ -9,7 +9,7 @@
       <div class="topbar-actions">
         <UsernameInput />
         <SelectLanguage />
-
+        <InstallButton />
         <EditData />
 
         <router-link to="/settings" class="settings-button" :title="$t('settings-title')">
@@ -33,6 +33,7 @@
 import SelectLanguage from './SelectLanguage.vue'
 import UsernameInput from './UsernameInput.vue'
 import EditData from './EditData.vue'
+import InstallButton from './InstallButton.vue'
 import { cdxIconSettings } from '@wikimedia/codex-icons'
 </script>
 

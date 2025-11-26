@@ -6,6 +6,7 @@ const i18n = createI18n({
   fallbackLocale: 'en', // set fallback locale
   messages: {
     en: {
+      'app-install': 'Install',
       'app-title': 'Gardens Havens',
       'app-tagline': 'Gallery of your biodiversity neighborhood, Wikimedia-boosted.',
       'settings-title': 'Settings',
@@ -37,6 +38,7 @@ const i18n = createI18n({
       'wikimedia-username-input-prompt': 'Input your Wikimedia username',
     },
     fr: {
+      'app-install': 'Installer',
       'app-title': 'Jardins Refuges',
       'app-tagline': 'Galerie de la biodiversité de votre quartier, boostée par Wikimedia.',
       'settings-title': 'Paramètres',
@@ -69,6 +71,7 @@ const i18n = createI18n({
       'wikimedia-username-input-prompt': "Saisissez votre nom d'utilisateur Wikimedia",
     },
     es: {
+      'app-install': 'Instalar',
       'app-title': 'Jardines Refugios',
       'app-tagline': 'Galería de la biodiversidad de su barrio, potenciada por Wikimedia.',
       'settings-title': 'Configuración',
@@ -101,6 +104,7 @@ const i18n = createI18n({
       'wikimedia-username-input-prompt': 'Ingrese su nombre de usuario de Wikimedia',
     },
     zh: {
+      'app-install': '安装',
       'app-title': '花园庇护所',
       'app-tagline': '您的社区生物多样性画廊，维基媒体加持。',
       'settings-title': '设置',
@@ -131,6 +135,7 @@ const i18n = createI18n({
       'wikimedia-username-input-prompt': '输入您的维基媒体用户名',
     },
     ko: {
+      'app-install': '설치',
       'app-title': '정원 피난처',
       'app-tagline': '위키미디어로 강화된 당신의 동네 생물다양성 갤러리.',
       'settings-title': '설정',
@@ -162,7 +167,7 @@ const i18n = createI18n({
       'wikimedia-username-input-prompt': '위키미디어 사용자명을 입력하세요',
     },
     ja: {
-      'app-title': 'ガーデンズ・ヘイブンズ',
+      'app-title': 'インストール',
       'app-tagline': 'あなたの地域の生物多様性ギャラリー、ウィキメディアでパワーアップ。',
       'settings-title': '設定',
       'navigation-back-to-gallery': 'ギャラリーに戻る',

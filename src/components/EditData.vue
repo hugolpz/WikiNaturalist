@@ -67,11 +67,11 @@ watch(
 )
 
 const editUrl = computed(() => {
+  const username = settings.wikimediaUsername
+
   if (!hasUsername.value) {
     return `https://meta.wikimedia.org/w/index.php?title=Special:UserLogin&returnto=User:${encodeURIComponent(username)}/GardensHavens`
   }
-
-  const username = settings.wikimediaUsername
   const baseUrl = `https://meta.wikimedia.org/w/index.php?title=User:${encodeURIComponent(username)}/GardensHavens`
 
   if (pageExists.value === true) {
