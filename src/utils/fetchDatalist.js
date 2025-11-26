@@ -104,6 +104,21 @@ function isIPAddress(str) {
 }
 
 /**
+ * Filters wikitext to only keep lines starting with =, *, or #
+ * @param {string} wikitext - The raw wikitext content
+ * @returns {string} Filtered wikitext with only relevant lines
+ */
+function wikitextFilter(wikitext) {
+  return wikitext
+    .split('\n')
+    .filter((line) => {
+      const trimmed = line.trim()
+      return trimmed.startsWith('=') || trimmed.startsWith('*') || trimmed.startsWith('#')
+    })
+    .join('\n')
+}
+
+/**
  * Fetches and parses the user's datalist from their Wikimedia user page
  * @param {string} username - The Wikimedia username
  * @returns {Promise<Array|null>} The parsed datalist or null if invalid
@@ -122,11 +137,10 @@ async function fetchUserDatalist(username) {
       return null
     }
     const wikitext = data.parse.wikitext['*']
+    const filteredLines = wikitextFilter(wikitext)
+    const listsData = parseWikitextDatalist(filteredLines)
 
-    // Use location-based parsing format
-    const locationsData = parseWikitextLocationBasedDatalist(wikitext)
-
-    return locationsData
+    return listsData
   } catch (error) {
     console.error('Error fetching user datalist:', error)
     return null
@@ -149,14 +163,12 @@ async function fetchUserDatalist(username) {
  * @param {string} wikitext - The raw wikitext content
  * @returns {Array|null} Array of location objects with structure: { location, lat, lon, list } or null if invalid
  */
-function parseWikitextLocationBasedDatalist(wikitext) {
+function parseWikitextDatalist(wikitext) {
   try {
-    const areas = []
+    const lists = []
 
-    // Remove <syntaxhighlight>, <pre>, and <nowiki> tags if present
-    let cleanText = wikitext
     // Split by == headers to get sections but preserve the matching strings
-    const sections = cleanText.split(/^==\s*(.+?)\s*==$/gm)
+    const sections = wikitext.split(/^==\s*(.+?)\s*==$/gm)
 
     // Process sections (skip first empty element)
     for (let i = 1; i < sections.length; i += 2) {
@@ -169,8 +181,8 @@ function parseWikitextLocationBasedDatalist(wikitext) {
       const listItems = content
         .split('\n')
         .map((line) => line.trim())
-        .filter((line) => line.startsWith('*'))
-        .map((line) => line.substring(1).trim())
+        .filter((line) => line.startsWith('*') || line.startsWith('#'))
+        .map((line) => line.substring(1).trim()) // remove leading '*'
         .filter((line) => line.length > 0)
 
       if (listItems.length === 0) continue
@@ -204,7 +216,7 @@ function parseWikitextLocationBasedDatalist(wikitext) {
 
       // Only add location if it has items
       if (datalist.length > 0) {
-        areas.push({
+        lists.push({
           location: locationName,
           lat: lat,
           lon: lon,
@@ -213,12 +225,12 @@ function parseWikitextLocationBasedDatalist(wikitext) {
       }
     }
 
-    return areas.length > 0 ? areas : null
+    return lists.length > 0 ? lists : null
   } catch (error) {
     console.error('Error parsing location-based wikitext datalist:', error)
     return null
   }
 }
 
-// Export the location-based parser for potential standalone use
-export { parseWikitextLocationBasedDatalist }
+// Export the location-based parser and wikitext filter for potential standalone use
+export { parseWikitextDatalist, wikitextFilter }
