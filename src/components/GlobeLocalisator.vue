@@ -27,18 +27,14 @@ const props = defineProps({
 })
 
 const { lat, lon, title, width } = toRefs(props)
-
 const globeContainer = ref(null)
-
 /**
  * Initialize the globe
  */
 const initGlobe = () => {
   if (!globeContainer.value) return
-
   // Clear any existing content
   globeContainer.value.innerHTML = ''
-
   // Create the orthographic globe
   try {
     createOrthographicGlobe(globeContainer.value, width.value, title.value, lat.value, lon.value)
