@@ -2,9 +2,9 @@
   "name": "Gardens Havens",
   "short_name": "Gardens Havens",
   "description": "Gallery of your biodiversity neighborhood, Wikimedia-boosted",
-  "start_url": "/",
+  "start_url": "/GardensHavens/",
   "display": "standalone",
-  "background_color": "#ffffff",
+  "background_color": "#80d080",
   "theme_color": "#2c3e50",
   "orientation": "portrait-primary",
   "categories": ["education", "utilities", "lifestyle"],
@@ -96,7 +96,7 @@
       "name": "Gallery",
       "short_name": "Gallery",
       "description": "View the species gallery",
-      "url": "/",
+      "url": "/GardensHavens/",
       "icons": [
         {
           "src": "/assets/logo-96.png",
@@ -109,7 +109,7 @@
       "name": "Settings",
       "short_name": "Settings",
       "description": "Configure app settings",
-      "url": "/settings",
+      "url": "/GardensHavens/settings",
       "icons": [
         {
           "src": "/assets/logo-96.png",
