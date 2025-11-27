@@ -8,10 +8,10 @@
 
       <div class="topbar-actions">
         <UsernameInput />
-        <SelectLanguage />
+        <LanguageSelect />
         <CompactButton />
         <InstallButton />
-        <EditData />
+        <EditDataButton />
 
         <router-link to="/settings" class="settings-button" :title="$t('settings-title')">
           <svg
@@ -31,9 +31,9 @@
 </template>
 
 <script setup>
-import SelectLanguage from './SelectLanguage.vue'
+import LanguageSelect from './LanguageSelect.vue'
 import UsernameInput from './UsernameInput.vue'
-import EditData from './EditData.vue'
+import EditDataButton from './EditDataButton.vue'
 import InstallButton from './InstallButton.vue'
 import CompactButton from './CompactButton.vue'
 import { cdxIconSettings } from '@wikimedia/codex-icons'
