@@ -13,9 +13,10 @@ Quickly build a gallery of your neighborhood's biodiversity, wikipedia-powered, 
 - ✏️ **Editable**: Update your lists as you go
 - ✨ **Shareable**: Easy sharing via URL or social media
 - 🧑‍🤝‍🧑 **Collaborative**: You may co-edit the lists on wikipedia
-- 📱 **Progressive Web App**: Installable, always at reach
+- 📱 **Installable**: As mobile & desktop app, always at reach
 - 🎨 **Responsive Design**: Optimized for all screen sizes
-- 🐣 **Kawai!**: Reduced and digest information, friendly design
+- 🐣 **Compact/Expanded modes**: For better viewing experience on all devices.
+- 🦦 **Kawai!**: Reduced and digest information, friendly design
 - 🗽 **Free & open**: it's Wikimedia, it's free & open source, for all.
 
 ## Development
