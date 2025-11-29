@@ -168,7 +168,7 @@ function parseWikitextDatalist(wikitext) {
     const lists = []
 
     // Split by == headers to get sections but preserve the matching strings
-    const sections = wikitext.split(/^==\s*(.+?)\s*==$/gm)
+    const sections = wikitext.split(/^==+\s*(.+?)\s*==+$/gm)
 
     // Process sections (skip first empty element)
     for (let i = 1; i < sections.length; i += 2) {
