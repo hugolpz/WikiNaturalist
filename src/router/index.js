@@ -20,7 +20,7 @@ const router = createRouter({
       path: '/User::username',
       name: 'user',
       component: GalleryView,
-      beforeEnter: (to, from) => {
+      beforeEnter: (to) => {
         console.log('Extracted username (1):', to.params.username)
         const username = to.params.username.replace(/:/g, '')
         console.log('Extracted username (2):', username)

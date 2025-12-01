@@ -53,7 +53,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, nextTick } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { fetchDatalist } from '@/utils/fetchDatalist'
 import { useSettingsStore } from '@/stores/settings'
@@ -67,9 +67,88 @@ const collectionsData = ref([])
 const loading = ref(true)
 const error = ref(null)
 
+let scrollAttempts = 0
+const MAX_SCROLL_ATTEMPTS = 30 // Increased to allow more time for card data loading
+
+function scrollToHash() {
+  const hash = window.location.hash.slice(1) // Remove the # symbol
+  if (!hash) return false
+
+  console.log(`Attempting to scroll to: ${hash}`)
+  const element = document.getElementById(hash)
+
+  if (element) {
+    console.log(`Element found: ${hash}, checking if loaded...`)
+
+    // Check if the card has finished loading (has card-content or card-loading class)
+    const cardContent = element.querySelector('.card-content')
+    const cardLoading = element.querySelector('.card-loading')
+
+    if (cardContent || (!cardLoading && scrollAttempts > 3)) {
+      // Card is loaded or we've waited enough
+      console.log(`Card loaded, scrolling to: ${hash}`)
+      setTimeout(() => {
+        element.scrollIntoView({ behavior: 'smooth', block: 'center' })
+        console.log(`Scrolled to: ${hash}`)
+      }, 500) // Longer delay to allow for images/content to render
+      return true
+    } else {
+      console.log(`Card still loading: ${hash}`)
+      return false
+    }
+  }
+
+  console.log(`Element not found yet: ${hash}, attempts: ${scrollAttempts}`)
+  return false
+}
+
+function setupHashObserver() {
+  const hash = window.location.hash.slice(1)
+  if (!hash) return
+
+  console.log(`Setting up hash observer for: ${hash}`)
+
+  // Wait a bit before starting to give cards time to mount
+  setTimeout(() => {
+    // Try immediate scroll first
+    if (scrollToHash()) return
+
+    // Set up interval-based checking
+    const intervalId = setInterval(() => {
+      scrollAttempts++
+
+      if (scrollToHash()) {
+        clearInterval(intervalId)
+        scrollAttempts = 0
+      } else if (scrollAttempts >= MAX_SCROLL_ATTEMPTS) {
+        console.warn(`Failed to scroll after ${MAX_SCROLL_ATTEMPTS} attempts: ${hash}`)
+        // Try one final scroll anyway
+        const element = document.getElementById(hash)
+        if (element) {
+          element.scrollIntoView({ behavior: 'smooth', block: 'center' })
+        }
+        clearInterval(intervalId)
+        scrollAttempts = 0
+      }
+    }, 300) // Check every 300ms
+
+    // Fallback: stop checking after 15 seconds
+    setTimeout(() => {
+      clearInterval(intervalId)
+      scrollAttempts = 0
+    }, 15000)
+  }, 500) // Initial delay to let cards start mounting
+}
+
 onMounted(async () => {
   try {
     collectionsData.value = await fetchDatalist()
+
+    // Wait for next tick to ensure DOM is updated
+    await nextTick()
+
+    // Setup hash observer after data is loaded
+    setupHashObserver()
   } catch (err) {
     error.value = t('status-loading-list-error')
     console.error(err)

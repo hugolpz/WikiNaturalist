@@ -49,6 +49,7 @@ export const useSettingsStore = defineStore('settings', () => {
 
   function setUsername(username) {
     wikimediaUsername.value = username
+    saveSetting('wikimedia-username', username)
   }
 
   function loadSetting(key, defaultValue) {
