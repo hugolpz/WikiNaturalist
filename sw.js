@@ -3,7 +3,7 @@ const STATIC_CACHE_URLS = [
   '/',
   '/index.html',
   '/manifest.json',
-  '/assets/logo1.jpeg',
+  '/assets/logo-192.png',
   '/assets/logo2.webp',
   '/assets/github.svg',
   '/assets/wikidata.svg',
@@ -112,20 +112,20 @@ self.addEventListener('push', (event) => {
 
   const options = {
     body: event.data ? event.data.text() : 'New content available!',
-    icon: '/assets/logo1.jpeg',
-    badge: '/assets/logo1.jpeg',
+    icon: '/assets/logo-192.png',
+    badge: '/assets/logo-96.png',
     vibrate: [200, 100, 200],
     tag: 'gardens-havens-notification',
     actions: [
       {
         action: 'open',
         title: 'Open App',
-        icon: '/assets/logo1.jpeg',
+        icon: '/assets/logo-96.png',
       },
       {
         action: 'close',
         title: 'Close',
-        icon: '/assets/logo1.jpeg',
+        icon: '/assets/logo-96.png',
       },
     ],
   }
