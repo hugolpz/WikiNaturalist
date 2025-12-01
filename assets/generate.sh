@@ -31,7 +31,7 @@ if [ ! -f "$SVG_FILE" ]; then
   exit 1
 fi
 # Define the sizes for the logos
-SIZES=(16 32 48 64 72 96 128 192 256 512)
+SIZES=(16 32 48 64 72 96 128 180 192 256 512)
 # Generate logos using either Inkscape or ImageMagick based on availability   
 if command -v inkscape &> /dev/null; then
   echo "Using Inkscape to generate logos..."
@@ -49,13 +49,13 @@ echo "logo generation complete. PNG files created:"
 for size in "${SIZES[@]}"; do
   echo "logo-${size}.png"
 done
-# Create favlogo.ico from the generated logos
+# Create favicon.ico from the generated logos
 if command -v convert &> /dev/null; then
-  echo "Creating favlogo.ico from generated logos..."
+  echo "Creating favicon.ico from generated logos..."
 else
-  echo "Warning: ImageMagick is required to create favlogo.ico."
+  echo "Warning: ImageMagick is required to create favicon.ico."
   exit 1
 fi
 # Convert the generated PNG files into a favlogo.ico file
-convert logo-16.png logo-32.png logo-48.png favlogo.ico  
+convert logo-16.png logo-32.png logo-48.png favicon.ico  
 # End of script
