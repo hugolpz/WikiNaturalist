@@ -1,5 +1,25 @@
-import { datalist as defaultDatalist } from '@/data/constants'
+const defaultDatalist = `
+== Spain ==
+# { lat: 43.0, lon: 1.17 }
+# Quercus robur
+# Erinaceus europaeus
+# Pica pica
+# Podarcis muralis
+# Hyla arborea
 
+== Indonesia ==
+# { lat: 0.27, lon: 115.03 }
+# Polypedates otilophus
+# Draco quinquefasciatus
+# Pongo pygmaeus
+# Helarctos malayanus
+# Neofelis diardi
+# Tragulus kanchil
+# Hylobates muelleri
+# Hydrornis baudii
+# Hydrornis schwaneri
+# Trogonoptera brookiana
+`
 /**
  * Fetches the user's custom datalist from Wikimedia if available
  * @returns {Promise<Array>} The datalist array (custom collections data or default datalist wrapped)
@@ -11,15 +31,7 @@ export async function fetchDatalist() {
 
     if (!username) {
       console.log('No Wikimedia username found, using default datalist')
-      // Wrap default datalist in collection format for consistency
-      return [
-        {
-          'collection-title': 'Default list',
-          lat: null,
-          lon: null,
-          list: defaultDatalist,
-        },
-      ]
+      return parseWikitextDatalist(defaultDatalist)
     }
 
     console.log(`Found Wikimedia username: ${username}`)
@@ -33,27 +45,12 @@ export async function fetchDatalist() {
     }
 
     console.log('No valid custom datalist found, using default')
-    // Wrap default datalist in collection format for consistency
-    return [
-      {
-        'collection-title': 'Default list',
-        lat: null,
-        lon: null,
-        list: defaultDatalist,
-      },
-    ]
   } catch (error) {
     console.error('Error fetching datalist:', error)
-    // Wrap default datalist in collection format for consistency
-    return [
-      {
-        'collection-title': 'Default list',
-        lat: null,
-        lon: null,
-        list: defaultDatalist,
-      },
-    ]
   }
+
+  // Fallback to default datalist (used for both no custom data and errors)
+  return parseWikitextDatalist(defaultDatalist)
 }
 
 /**
@@ -217,7 +214,7 @@ function parseWikitextDatalist(wikitext) {
       // Only add collection if it has items
       if (datalist.length > 0) {
         lists.push({
-          'collection-title': collectionName,
+          collectionTitle: collectionName,
           lat: lat,
           lon: lon,
           list: datalist,

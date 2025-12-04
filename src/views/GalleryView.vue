@@ -15,21 +15,21 @@
       <div class="collections-container">
         <div
           v-for="(collection, index) in collectionsData"
-          :key="collection['collection-title']"
+          :key="collection.collectionTitle"
           :id="`collection-${index}`"
           class="collection-section"
         >
           <!-- collection Header -->
           <div class="collection-header">
-            <h2 class="collection-title">{{ collection['collection-title'] }}</h2>
+            <h2 class="collectionTitle">{{ collection.collectionTitle }}</h2>
             <div v-if="collection.lat && collection.lon" class="collection-coordinates">
               <span class="coordinates">
-                📍 {{ collection.lat.toFixed(3) }}, {{ collection.lon.toFixed(3) }}
+                📍 {{ collection.lat.toFixed(2) }}, {{ collection.lon.toFixed(2) }}
               </span>
               <GlobeLocalisator
                 :lat="collection.lat"
                 :lon="collection.lon"
-                :title="collection['collection-title']"
+                :title="collection.collectionTitle"
                 :width="64"
                 class="collection-globe-wp"
               />
@@ -161,7 +161,6 @@ onMounted(async () => {
 <style scoped>
 .gallery-view {
   margin: 0 auto;
-  padding: 2rem;
 }
 
 .gallery-loading,
@@ -179,13 +178,13 @@ onMounted(async () => {
 .collections-container {
   display: flex;
   flex-direction: column;
-  gap: 3rem;
+  gap: 2rem;
 }
 
 .collection-section {
   background-color: #f8f9fa;
-  border-radius: 12px;
-  padding: 2rem;
+  /* border-radius: 12px; */
+  padding: 1rem 2rem;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
   scroll-margin-top: 100px; /* Space for sticky nav */
 }
@@ -199,7 +198,7 @@ onMounted(async () => {
   border-bottom: 2px solid #e9ecef;
 }
 
-.collection-title {
+.collectionTitle {
   font-size: 1.75rem;
   font-weight: 700;
   color: #2c3e50;
@@ -237,7 +236,7 @@ onMounted(async () => {
 
 .gallery-grid--compact {
   grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: 1.5rem;
+  gap: 1rem;
 }
 
 @media (max-width: 768px) {
@@ -260,7 +259,7 @@ onMounted(async () => {
     gap: 0.75rem;
   }
 
-  .collection-title {
+  .collectionTitle {
     font-size: 1.5rem;
   }
 
@@ -286,7 +285,7 @@ onMounted(async () => {
     scroll-margin-top: 70px;
   }
 
-  .collection-title {
+  .collectionTitle {
     font-size: 1.25rem;
   }
 

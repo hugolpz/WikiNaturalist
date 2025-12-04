@@ -2,13 +2,13 @@
   <nav class="collection-nav">
     <a
       v-for="(collection, index) in collections"
-      :key="`nav-${collection['collection-title']}`"
+      :key="`nav-${collection.collectionTitle}`"
       :href="`#collection-${index}`"
       class="collection-nav-link"
       @click.prevent="scrollToCollection(index)"
     >
       <span class="nav-icon">🌿</span>
-      <span class="nav-text">{{ collection['collection-title'] }}</span>
+      <span class="nav-text">{{ collection.collectionTitle }}</span>
       <span class="nav-count">{{ collection.list.length }}</span>
     </a>
   </nav>
@@ -50,7 +50,7 @@ const scrollToCollection = (index) => {
   z-index: 100;
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   padding: 1rem;
-  margin: -2rem -2rem 2rem -2rem;
+  margin: 0 0 2rem 0;
   display: flex;
   gap: 0.75rem;
   overflow-x: auto;

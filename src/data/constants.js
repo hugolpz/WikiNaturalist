@@ -1,13 +1,15 @@
-export const datalist = [
-  { binomial: 'Canis lupus familiaris' },
-  { binomial: 'Felis catus' },
-  { binomial: 'Pica pica' },
-  { binomial: 'Podarcis muralis' },
-  { binomial: 'Quercus robur' },
-  { binomial: 'Prunus avium' },
-  { binomial: 'Poa pratensis' },
-  { binomial: 'Taraxacum officinale' },
-]
+export const defaultDatalist = `
+== Default list ==
+# { lat: 44.0, lon: 1.17 }
+# Canis lupus familiaris
+# Felis catus
+# Pica pica
+# Podarcis muralis
+# Quercus robur
+# Prunus avium
+# Poa pratensis
+# Taraxacum officinale
+`
 
 // Re-export category functionality from centralized location
 export {
