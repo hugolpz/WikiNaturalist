@@ -29,8 +29,32 @@ $ npm run dev           # Start development server
 $ npm run build         # Build for production
 $ npm run preview       # Preview production build
 $ npm run lint          # Lint code
-$ npm run deploy        # Deploy to GitHub Pages
-$ git push              # Triggers GitHub Pages deployment
+```
+
+### Deployment
+
+**GitHub Pages** (automatic via GitHub Actions):
+
+```bash
+$ git push              # Triggers automatic deployment
+# Builds with base: /WikiNaturalist/
+# Deploys to: https://hugolpz.github.io/WikiNaturalist/
+```
+
+**Toolforge** (automatic via GitHub Actions):
+
+```bash
+$ git push              # Triggers automatic deployment
+# Builds with base: / (root path)
+# Requires secrets: SSH_PRIVATE_KEY, TOOLFORGE_USERNAME, TOOLFORGE_HOST
+# Deploys to: https://wikinaturalist.toolforge.org/
+```
+
+**Manual Toolforge Build**:
+
+```bash
+$ npm run build -- --mode toolforge
+# Builds for root path deployment
 ```
 
 ### Project Structure
@@ -57,9 +81,16 @@ public/
 - **i18n**: vue-i18n for solid multilingual support
 - **Progressive Web App** installable, works offline
 
-### GitHub Pages Deployment
+### Deployment Targets
 
-Enable GitHub Pages in repository Settings → Pages → Source: "GitHub Actions"
+1. **GitHub Pages**: https://hugolpz.github.io/WikiNaturalist/
+   - Base path: `/WikiNaturalist/`
+   - Auto-deploys on push to `main`
+
+2. **Toolforge**: https://wikinaturalist.toolforge.org/
+   - Base path: `/` (root)
+   - Auto-deploys on push to `main`
+   - Requires GitHub secrets configuration
 
 ## Browser Support
 
