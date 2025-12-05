@@ -1,8 +1,8 @@
 {
-  "name": "Gardens Havens",
-  "short_name": "Gardens Havens",
+  "name": "WikiNaturalist",
+  "short_name": "WikiNaturalist",
   "description": "Gallery of your biodiversity neighborhood, Wikimedia-boosted",
-  "start_url": "/GardensHavens/",
+  "start_url": "/WikiNaturalist/",
   "display": "standalone",
   "background_color": "#80d080",
   "theme_color": "#2c3e50",
@@ -96,7 +96,7 @@
       "name": "Gallery",
       "short_name": "Gallery",
       "description": "View the species gallery",
-      "url": "/GardensHavens/",
+      "url": "/WikiNaturalist/",
       "icons": [
         {
           "src": "/assets/logo-96.png",
@@ -109,7 +109,7 @@
       "name": "Settings",
       "short_name": "Settings",
       "description": "Configure app settings",
-      "url": "/GardensHavens/settings",
+      "url": "/WikiNaturalist/settings",
       "icons": [
         {
           "src": "/assets/logo-96.png",

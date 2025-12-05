@@ -122,7 +122,7 @@ function wikitextFilter(wikitext) {
  */
 async function fetchUserDatalist(username) {
   try {
-    const pageTitle = `User:${username.replace(/"/g, '')}/GardensHavens`
+    const pageTitle = `User:${username.replace(/"/g, '')}/WikiNaturalist`
     const url = `https://meta.wikimedia.org/w/api.php?action=parse&page=${encodeURIComponent(pageTitle)}&prop=wikitext&format=json&origin=*`
 
     const response = await fetch(url)

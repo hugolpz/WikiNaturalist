@@ -1,4 +1,4 @@
-const CACHE_NAME = 'gardens-havens-v1'
+const CACHE_NAME = 'wikinaturalist-v1'
 const STATIC_CACHE_URLS = [
   '/',
   '/index.html',
@@ -115,7 +115,7 @@ self.addEventListener('push', (event) => {
     icon: '/assets/logo-192.png',
     badge: '/assets/logo-96.png',
     vibrate: [200, 100, 200],
-    tag: 'gardens-havens-notification',
+    tag: 'wikinaturalist-notification',
     actions: [
       {
         action: 'open',
@@ -130,7 +130,7 @@ self.addEventListener('push', (event) => {
     ],
   }
 
-  event.waitUntil(self.registration.showNotification('Gardens Havens', options))
+  event.waitUntil(self.registration.showNotification('WikiNaturalist', options))
 })
 
 // Notification click handling

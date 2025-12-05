@@ -20,7 +20,7 @@ export default defineConfig(({ command }) => {
         '@': fileURLToPath(new URL('./src', import.meta.url)),
       },
     },
-    base: command === 'build' ? '/GardensHavens/' : '/',
+    base: command === 'build' ? '/WikiNaturalist/' : '/',
     build: {
       outDir: 'dist',
       assetsDir: 'assets',

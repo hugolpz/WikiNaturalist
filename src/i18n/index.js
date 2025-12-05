@@ -7,7 +7,7 @@ const i18n = createI18n({
   messages: {
     en: {
       'app-install': 'Install',
-      'app-title': 'Gardens Havens',
+      'app-title': 'WikiNaturalist',
       'app-tagline': 'Gallery of your biodiversity neighborhood, Wikimedia-boosted.',
       'settings-title': 'Settings',
       'navigation-back-to-gallery': 'Back to Gallery',

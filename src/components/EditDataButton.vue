@@ -33,7 +33,7 @@ const hasUsername = computed(
 const pageExists = ref(null) // null = checking, true = exists, false = doesn't exist
 
 /**
- * Check if a user's GardensHavens page exists on Meta Wikimedia
+ * Check if a meta:User:{username}/WikiNaturalist list page exists on Meta Wikimedia
  */
 async function checkListWikipageExists(username) {
   try {

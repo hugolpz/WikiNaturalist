@@ -1,6 +1,6 @@
-# Gardens Havens 🌿
+# WikiNaturalist 🌿
 
-Quickly build a gallery of your neighborhood's biodiversity, wikipedia-powered, shareable and collaborative.
+Easily build a gallery of your neighborhood's biodiversity, wikipedia-powered, shareable and collaborative.
 
 💡 The system works best with binomial names, but any topic with Wikimedia data and distinctive names will work. Qid could work too.
 
@@ -37,11 +37,11 @@ $ git push              # Triggers GitHub Pages deployment
 
 ```
 src/
+├── views/             # Page components
 ├── components/        # Vue components
-├── i18n/              # Internationalization (6 languages)
+├── i18n/              # Internationalization (7 languages)
 ├── stores/            # Pinia state management
-├── utils/             # Data fetching and categorization
-└── views/             # Page components
+└── utils/             # Script for data fetching, categorization, etc.
 
 public/
 ├── assets/            # Static assets and icons

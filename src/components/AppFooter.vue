@@ -10,7 +10,7 @@
 
       <div class="footer-right">
         <a
-          href="https://github.com/hugolpz/GardensHavens/"
+          href="https://github.com/hugolpz/WikiNaturalist/"
           target="_blank"
           rel="noopener noreferrer"
           class="github-link"
