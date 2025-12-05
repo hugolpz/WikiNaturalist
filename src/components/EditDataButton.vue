@@ -35,9 +35,9 @@ const pageExists = ref(null) // null = checking, true = exists, false = doesn't 
 /**
  * Check if a user's GardensHavens page exists on Meta Wikimedia
  */
-async function checkPageExists(username) {
+async function checkListWikipageExists(username) {
   try {
-    const pageTitle = `User:${username}/GardensHavens`
+    const pageTitle = `User:${username}/WikiNaturalist`
     const url = `https://meta.wikimedia.org/w/api.php?action=query&titles=${encodeURIComponent(pageTitle)}&format=json&origin=*`
 
     const response = await fetch(url)
@@ -58,7 +58,7 @@ watch(
   async (newHasUsername) => {
     if (newHasUsername) {
       pageExists.value = null // Set to checking state
-      pageExists.value = await checkPageExists(settings.wikimediaUsername)
+      pageExists.value = await checkListWikipageExists(settings.wikimediaUsername)
     } else {
       pageExists.value = null
     }
@@ -68,18 +68,13 @@ watch(
 
 const editUrl = computed(() => {
   const username = settings.wikimediaUsername
-
-  if (!hasUsername.value) {
-    return `https://meta.wikimedia.org/w/index.php?title=Special:UserLogin&returnto=User:${encodeURIComponent(username)}/GardensHavens`
-  }
-  const baseUrl = `https://meta.wikimedia.org/w/index.php?title=User:${encodeURIComponent(username)}/GardensHavens`
-
+  const baseUrl = `https://meta.wikimedia.org/w/index.php?title=Special:UserLogin&returnto=Special:MyPage/WikiNaturalist`
   if (pageExists.value === true) {
-    // Page exists - direct edit link with guideline intro
-    return `${baseUrl}&action=edit&veswitched=1&editintro=User:Yug/Guideline`
+    // List page exists -> EDIT it with guideline intro
+    return `${baseUrl}&action=edit&veswitched=1&editintro=WikiNaturalist/Guideline`
   } else {
-    // Page doesn't exist or we're still checking - create with template
-    return `${baseUrl}&action=edit&veswitched=1&editintro=User:Yug/Guideline&preload=User:Yug/Guideline/Placeholder`
+    // List page missing -> CREATE with template
+    return `${baseUrl}&action=edit&veswitched=1&editintro=WikiNaturalist/Guideline&preload=WikiNaturalist/Placeholder`
   }
 })
 </script>
