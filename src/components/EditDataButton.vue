@@ -22,6 +22,7 @@
 <script setup>
 import { computed, ref, watch } from 'vue'
 import { useSettingsStore } from '@/stores/settings'
+import { checkDatalistExists } from '@/utils/fetchDatalist'
 import { cdxIconEdit } from '@wikimedia/codex-icons'
 
 const settings = useSettingsStore()
@@ -32,33 +33,13 @@ const hasUsername = computed(
 
 const pageExists = ref(null) // null = checking, true = exists, false = doesn't exist
 
-/**
- * Check if a meta:User:{username}/WikiNaturalist list page exists on Meta Wikimedia
- */
-async function checkListWikipageExists(username) {
-  try {
-    const pageTitle = `User:${username}/WikiNaturalist`
-    const url = `https://meta.wikimedia.org/w/api.php?action=query&titles=${encodeURIComponent(pageTitle)}&format=json&origin=*`
-
-    const response = await fetch(url)
-    const data = await response.json()
-
-    // Page exists if it's not marked as "missing"
-    const page = Object.values(data.query.pages)[0]
-    return !page.missing
-  } catch (error) {
-    console.error('Error checking page existence:', error)
-    return false // Default to creation mode if check fails
-  }
-}
-
 // Watch for username changes and check page existence
 watch(
   hasUsername,
   async (newHasUsername) => {
     if (newHasUsername) {
       pageExists.value = null // Set to checking state
-      pageExists.value = await checkListWikipageExists(settings.wikimediaUsername)
+      pageExists.value = await checkDatalistExists(settings.wikimediaUsername)
     } else {
       pageExists.value = null
     }
@@ -67,7 +48,6 @@ watch(
 )
 
 const editUrl = computed(() => {
-  const username = settings.wikimediaUsername
   const baseUrl = `https://meta.wikimedia.org/w/index.php?title=Special:UserLogin&returnto=Special:MyPage/WikiNaturalist`
   if (pageExists.value === true) {
     // List page exists -> EDIT it with guideline intro

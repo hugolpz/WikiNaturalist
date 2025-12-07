@@ -1,7 +1,7 @@
 <template>
   <header class="topbar">
     <div class="topbar-container">
-      <router-link to="/" class="topbar-title">
+      <router-link :to="homeRoute" class="topbar-title">
         <h1>{{ $t('app-title') }}</h1>
         <p class="tagline">{{ $t('app-tagline') }}</p>
       </router-link>
@@ -31,12 +31,23 @@
 </template>
 
 <script setup>
+import { computed } from 'vue'
 import LanguageSelect from './LanguageSelect.vue'
 import UsernameInput from './UsernameInput.vue'
 import EditDataButton from './EditDataButton.vue'
 import InstallButton from './InstallButton.vue'
 import CompactButton from './CompactButton.vue'
+import { useSettingsStore } from '@/stores/settings'
 import { cdxIconSettings } from '@wikimedia/codex-icons'
+
+const settings = useSettingsStore()
+
+const homeRoute = computed(() => {
+  if (settings.wikimediaUsername && settings.wikimediaUsername.trim() !== '') {
+    return `/User:${settings.wikimediaUsername}`
+  }
+  return '/'
+})
 </script>
 
 <style scoped>

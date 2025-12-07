@@ -20,6 +20,29 @@ const defaultDatalist = `
 # Hydrornis schwaneri
 # Trogonoptera brookiana
 `
+
+/**
+ * Check if a user's WikiNaturalist datalist page exists on Meta Wikimedia
+ * @param {string} username - The Wikimedia username
+ * @returns {Promise<boolean>} True if page exists, false otherwise
+ */
+export async function checkDatalistExists(username) {
+  try {
+    const pageTitle = `User:${username}/WikiNaturalist`
+    const url = `https://meta.wikimedia.org/w/api.php?action=query&titles=${encodeURIComponent(pageTitle)}&format=json&origin=*`
+
+    const response = await fetch(url)
+    const data = await response.json()
+
+    // Page exists if it's not marked as "missing"
+    const page = Object.values(data.query.pages)[0]
+    return !page.missing
+  } catch (error) {
+    console.error('Error checking datalist existence:', error)
+    return false
+  }
+}
+
 /**
  * Fetches the user's custom datalist from Wikimedia if available
  * @returns {Promise<Array>} The datalist array (custom collections data or default datalist wrapped)

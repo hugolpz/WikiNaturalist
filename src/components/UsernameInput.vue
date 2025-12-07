@@ -4,31 +4,24 @@
       v-if="isEditing"
       v-model="username"
       type="text"
-      class="username-input no-username"
+      class="username-input"
       :placeholder="$t('wikimedia-username-input-prompt')"
       @blur="handleBlur"
       @focus="startEditing"
     />
     <div
       v-else
-      class="username-display has-username"
+      class="username-display"
+      :class="{ 'has-username': hasUsername, hovered: isHovering }"
       @click="startEditing"
       @mouseenter="isHovering = true"
       @mouseleave="isHovering = false"
-      :class="{ hovered: isHovering }"
     >
-      {{ username }}
-    </div>
-    <div
-      v-if="!hasUsername && !isEditing"
-      class="username-display no-username-display"
-      @click="startEditing"
-      @mouseenter="isHovering = true"
-      @mouseleave="isHovering = false"
-      :class="{ hovered: isHovering }"
-    >
-      <span class="username-text-desktop">Username ?</span>
-      <span class="username-text-mobile">User?</span>
+      <template v-if="hasUsername">{{ username }}</template>
+      <template v-else>
+        <span class="desktop-text">Username ?</span>
+        <span class="mobile-text">User?</span>
+      </template>
     </div>
   </div>
 </template>
@@ -36,6 +29,7 @@
 <script setup>
 import { ref, computed, watch, onMounted } from 'vue'
 import { useSettingsStore } from '@/stores/settings'
+import { navigateToUser, updateRouteForUsername } from '@/router'
 
 const settings = useSettingsStore()
 
@@ -49,17 +43,28 @@ function startEditing() {
   isEditing.value = true
 }
 
-function handleBlur() {
+async function handleBlur() {
   isEditing.value = false
-  // Sync with settings store when user finishes editing
-  settings.wikimediaUsername = username.value
+
+  // Use router helper to handle navigation and validation
+  const result = await navigateToUser(username.value)
+
+  if (!result.success) {
+    // Revert to previous username if navigation failed
+    username.value = settings.wikimediaUsername
+    alert(result.message)
+  }
 }
 
-// Watch for changes from settings store (e.g., from Settings page)
+// Watch for changes from settings store (e.g., from Settings page or route)
 watch(
   () => settings.wikimediaUsername,
   (newValue) => {
     username.value = newValue
+    // Only update route if not currently editing
+    if (!isEditing.value) {
+      updateRouteForUsername(newValue)
+    }
   },
   { immediate: true },
 )
@@ -87,48 +92,40 @@ onMounted(() => {
   cursor: pointer;
 }
 
-/* When no username is set or editing */
-.username-input.no-username {
+.username-input {
   background-color: white;
   color: rgb(44, 62, 80);
   border-color: rgba(255, 255, 255, 0.5);
 }
 
-.username-input.no-username::placeholder {
+.username-input::placeholder {
   color: rgba(44, 62, 80, 0.6);
 }
 
-.username-input.no-username:focus {
+.username-input:focus {
   outline: none;
   box-shadow: 0 0 0 1px rgba(44, 62, 80, 0.3);
 }
 
-/* When username is set and not being edited */
+.username-display {
+  background-color: rgba(255, 255, 255, 0.1);
+  color: rgba(255, 255, 255, 0.8);
+}
+
 .username-display.has-username {
   background-color: rgb(44, 62, 80);
   color: white;
   border-color: rgb(44, 62, 80);
-  cursor: pointer;
 }
 
-.username-display.has-username.hovered {
+.username-display.hovered {
   background-color: white;
   color: rgb(44, 62, 80);
   border-color: rgba(255, 255, 255, 0.5);
 }
 
-/* When no username is set - show "Username ?" */
-.username-display.no-username-display {
-  background-color: rgba(255, 255, 255, 0.1);
-  color: rgba(255, 255, 255, 0.8);
-  border-color: rgba(255, 255, 255, 0.3);
-  cursor: pointer;
-}
-
-.username-display.no-username-display.hovered {
-  background-color: white;
-  color: rgb(44, 62, 80);
-  border-color: rgba(255, 255, 255, 0.5);
+.mobile-text {
+  display: none;
 }
 
 @media (max-width: 768px) {
@@ -148,22 +145,12 @@ onMounted(() => {
     padding: 0.35rem 0.6rem;
   }
 
-  .username-text-desktop {
+  .desktop-text {
     display: none;
   }
 
-  .username-text-mobile {
+  .mobile-text {
     display: inline;
-  }
-}
-
-@media (min-width: 481px) {
-  .username-text-desktop {
-    display: inline;
-  }
-
-  .username-text-mobile {
-    display: none;
   }
 }
 </style>

@@ -2,6 +2,7 @@ import { createRouter, createWebHashHistory } from 'vue-router'
 import GalleryView from '@/views/GalleryView.vue'
 import SettingsView from '@/views/SettingsView.vue'
 import { useSettingsStore } from '@/stores/settings'
+import { checkDatalistExists } from '@/utils/fetchDatalist'
 
 const router = createRouter({
   history: createWebHashHistory(import.meta.env.BASE_URL),
@@ -36,5 +37,52 @@ const router = createRouter({
     },
   ],
 })
+
+/**
+ * Navigate to user route with username validation and refresh
+ * @param {string} username - The Wikimedia username
+ * @returns {Promise<{success: boolean, message?: string}>}
+ */
+export async function navigateToUser(username) {
+  const trimmedUsername = username.trim()
+
+  // If no username, go to root
+  if (!trimmedUsername) {
+    const settingsStore = useSettingsStore()
+    settingsStore.setUsername('')
+    await router.push({ path: '/' })
+    return { success: true }
+  }
+
+  // Check if datalist exists
+  const exists = await checkDatalistExists(trimmedUsername)
+
+  if (exists) {
+    const settingsStore = useSettingsStore()
+    settingsStore.setUsername(trimmedUsername)
+    // Force refresh by navigating to root first, then to user route
+    await router.push({ path: '/' })
+    await router.push({ path: `/User:${trimmedUsername}` })
+    return { success: true }
+  } else {
+    console.warn(`No datalist found for user: ${trimmedUsername}`)
+    return {
+      success: false,
+      message: `No species list found for user "${trimmedUsername}"`,
+    }
+  }
+}
+
+/**
+ * Update route based on current username in settings
+ * @param {string} username - The current username
+ */
+export async function updateRouteForUsername(username) {
+  if (username && username.trim() !== '') {
+    await router.push({ path: `/User:${username}` })
+  } else {
+    await router.push({ path: '/' })
+  }
+}
 
 export default router
