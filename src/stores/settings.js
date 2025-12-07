@@ -9,6 +9,7 @@ export const useSettingsStore = defineStore('settings', () => {
   const showConservationStatus = ref(loadSetting('showConservationStatus', true))
   const showShortDescription = ref(loadSetting('showShortDescription', false))
   const showLongDescription = ref(loadSetting('showLongDescription', true))
+  const showCardFooter = ref(loadSetting('showCardFooter', true))
   const wikimediaUsername = ref(loadSetting('wikimedia-username', ''))
 
   // Detect mobile and set default compact view
@@ -38,6 +39,10 @@ export const useSettingsStore = defineStore('settings', () => {
 
   watch(showLongDescription, (value) => {
     saveSetting('showLongDescription', value)
+  })
+
+  watch(showCardFooter, (value) => {
+    saveSetting('showCardFooter', value)
   })
 
   watch(wikimediaUsername, (value) => {
@@ -73,6 +78,7 @@ export const useSettingsStore = defineStore('settings', () => {
     showConservationStatus,
     showShortDescription,
     showLongDescription,
+    showCardFooter,
     wikimediaUsername,
     compactView,
     toggleCompactView,

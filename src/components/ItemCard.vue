@@ -83,7 +83,7 @@
       </div>
 
       <!-- Card Footer -->
-      <div class="card-footer">
+      <div v-if="settings.showCardFooter" class="card-footer">
         <a
           :href="wikipediaUrl"
           target="_blank"
@@ -103,6 +103,17 @@
           :title="$t('link-wikidata')"
         >
           <img src="/assets/wikidata.svg" alt="Wikidata" class="footer-icon" />
+        </a>
+
+        <a
+          v-if="cardData.gbifId"
+          :href="`https://www.gbif.org/species/${cardData.gbifId}`"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="footer-link"
+          title="GBIF Species Page"
+        >
+          <img src="/assets/gbif.svg" alt="GBIF" class="footer-icon" />
         </a>
 
         <button

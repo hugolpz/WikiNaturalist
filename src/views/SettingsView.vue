@@ -75,6 +75,11 @@
             />
             <span class="setting-label">{{ $t('settings-visibility-description-long') }}</span>
           </label>
+
+          <label class="setting-option">
+            <input v-model="settings.showCardFooter" type="checkbox" class="setting-checkbox" />
+            <span class="setting-label">Card footer (Wikipedia, Wikidata, Share links)</span>
+          </label>
         </div>
       </div>
 

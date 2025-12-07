@@ -31,6 +31,7 @@ export async function fetchCardData(binomialName, locale = 'en') {
       longDescription: wikipediaData?.firstParagraph || null,
       infobox: wikipediaData?.infobox || null,
       wikidataId: wikidataData.id || null,
+      gbifId: wikidataData.gbifId || null,
       assessedGroup: assessedCategory, // Add the assessed category
     }
   } catch (error) {
@@ -46,6 +47,7 @@ export async function fetchCardData(binomialName, locale = 'en') {
       longDescription: null,
       infobox: null,
       wikidataId: null,
+      gbifId: null,
       assessedGroup: 'unknown', // Default fallback
     }
   }
@@ -69,6 +71,7 @@ async function fetchWikidataInfo(binomialName, locale = 'en') {
         image: null,
         rangeMap: null,
         description: null,
+        gbifId: null,
       }
     }
 
@@ -122,6 +125,12 @@ async function fetchWikidataInfo(binomialName, locale = 'en') {
       }
     }
 
+    // P846: GBIF taxon ID
+    let gbifId = null
+    if (claims.P846 && claims.P846[0]) {
+      gbifId = claims.P846[0].mainsnak.datavalue.value
+    }
+
     return {
       id: entityId,
       taxonName,
@@ -129,6 +138,7 @@ async function fetchWikidataInfo(binomialName, locale = 'en') {
       image,
       rangeMap,
       description: shortDescription,
+      gbifId,
     }
   } catch (error) {
     console.error('Error fetching Wikidata info:', error)
@@ -138,6 +148,7 @@ async function fetchWikidataInfo(binomialName, locale = 'en') {
       image: null,
       rangeMap: null,
       description: null,
+      gbifId: null,
     }
   }
 }
