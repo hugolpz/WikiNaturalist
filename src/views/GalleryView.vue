@@ -62,7 +62,8 @@
 </template>
 
 <script setup>
-import { ref, onMounted, nextTick } from 'vue'
+import { ref, onMounted, nextTick, watch } from 'vue'
+import { useRoute } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { fetchDatalist } from '@/utils/fetchDatalist'
 import { useSettingsStore } from '@/stores/settings'
@@ -71,6 +72,7 @@ import EditDataButton from '@/components/EditDataButton.vue'
 import GlobeLocalisator from '@/components/GlobeLocalisator.vue'
 import CollectionNav from '@/components/CollectionNav.vue'
 
+const route = useRoute()
 const { t } = useI18n()
 const settings = useSettingsStore()
 const collectionsData = ref([])
@@ -150,8 +152,13 @@ function setupHashObserver() {
   }, 500) // Initial delay to let cards start mounting
 }
 
-onMounted(async () => {
+async function loadGalleryData() {
+  loading.value = true
+  error.value = null
+  scrollAttempts = 0
+
   try {
+    console.log('Loading gallery data for user:', settings.wikimediaUsername || 'Guest')
     collectionsData.value = await fetchDatalist()
 
     // Wait for next tick to ensure DOM is updated
@@ -161,11 +168,26 @@ onMounted(async () => {
     setupHashObserver()
   } catch (err) {
     error.value = t('status-loading-list-error')
-    console.error(err)
+    console.error('Error loading gallery data:', err)
   } finally {
     loading.value = false
   }
+}
+
+onMounted(() => {
+  loadGalleryData()
 })
+
+// Watch for route changes and reload data
+watch(
+  () => route.path,
+  (newPath, oldPath) => {
+    if (newPath !== oldPath) {
+      console.log(`Route changed from ${oldPath} to ${newPath}, reloading gallery data`)
+      loadGalleryData()
+    }
+  },
+)
 </script>
 
 <style scoped>

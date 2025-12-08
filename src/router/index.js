@@ -1,4 +1,5 @@
 import { createRouter, createWebHashHistory } from 'vue-router'
+import { watch } from 'vue'
 import GalleryView from '@/views/GalleryView.vue'
 import SettingsView from '@/views/SettingsView.vue'
 import { useSettingsStore } from '@/stores/settings'
@@ -21,21 +22,25 @@ const router = createRouter({
       path: '/User::username',
       name: 'user',
       component: GalleryView,
-      beforeEnter: (to) => {
-        console.log('Extracted username (1):', to.params.username)
-        const username = to.params.username.replace(/:/g, '')
-        console.log('Extracted username (2):', username)
-        if (username) {
-          // Set the username in Pinia store and localStorage
-          const settingsStore = useSettingsStore()
-          settingsStore.setUsername(username)
-          console.log(`Wikimedia username set to: ${username}`)
-        }
-        // Redirect to gallery, preserving the hash fragment (e.g., #item-card-Pica_pica)
-        // next({ name: 'gallery', hash: to.hash, replace: true })
-      },
     },
   ],
+})
+
+// Global navigation guard - runs BEFORE any route-specific guards
+router.beforeEach(async (to, from) => {
+  const settings = useSettingsStore()
+
+  // Extract username from User route
+  if (to.path.startsWith('/User:')) {
+    const username = to.params.username?.replace(/:/g, '')
+    if (username) {
+      console.log('Global guard: Setting username from URL:', username)
+      await settings.setUsername(username)
+    }
+  } else if (to.path === '/' && from.path.startsWith('/User:')) {
+    // Navigating from user page to home - keep username in store but don't clear it
+    console.log('Global guard: Navigating to home, keeping username:', settings.wikimediaUsername)
+  }
 })
 
 /**
@@ -45,23 +50,18 @@ const router = createRouter({
  */
 export async function navigateToUser(username) {
   const trimmedUsername = username.trim()
+  const settings = useSettingsStore()
 
-  // If no username, go to root
   if (!trimmedUsername) {
-    const settingsStore = useSettingsStore()
-    settingsStore.setUsername('')
+    await settings.setUsername('')
     await router.push({ path: '/' })
     return { success: true }
   }
 
-  // Check if datalist exists
   const exists = await checkDatalistExists(trimmedUsername)
 
   if (exists) {
-    const settingsStore = useSettingsStore()
-    settingsStore.setUsername(trimmedUsername)
-    // Force refresh by navigating to root first, then to user route
-    await router.push({ path: '/' })
+    await settings.setUsername(trimmedUsername)
     await router.push({ path: `/User:${trimmedUsername}` })
     return { success: true }
   } else {
@@ -84,5 +84,42 @@ export async function updateRouteForUsername(username) {
     await router.push({ path: '/' })
   }
 }
+
+// Watch settings.wikimediaUsername and sync route
+// This ensures the URL updates when username changes from anywhere (e.g., SettingsView)
+let isUpdatingFromRoute = false
+
+router.afterEach(() => {
+  // Prevent circular updates when route changes trigger settings updates
+  isUpdatingFromRoute = true
+  setTimeout(() => {
+    isUpdatingFromRoute = false
+  }, 100)
+})
+
+// Initialize watcher after router is ready
+router.isReady().then(() => {
+  const settings = useSettingsStore()
+
+  watch(
+    () => settings.wikimediaUsername,
+    async (newUsername) => {
+      // Prevent circular updates
+      if (isUpdatingFromRoute) return
+
+      // Get current route path
+      const currentPath = router.currentRoute.value.path
+
+      // Determine target path
+      const targetPath = newUsername && newUsername.trim() !== '' ? `/User:${newUsername}` : '/'
+
+      // Only navigate if path actually changed
+      if (currentPath !== targetPath) {
+        console.log(`Username changed to: ${newUsername}, updating route to: ${targetPath}`)
+        await updateRouteForUsername(newUsername)
+      }
+    },
+  )
+})
 
 export default router

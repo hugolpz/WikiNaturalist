@@ -74,10 +74,8 @@ export const useSettingsStore = defineStore('settings', () => {
     saveSetting('showCardFooter', value)
   })
 
-  watch(wikimediaUsername, async (value) => {
-    saveSetting('wikimediaUsername', value)
-    isWikimedian.value = await wikimediaUsernameExists(value)
-  })
+  // Note: wikimediaUsername watcher removed - setUsername() handles saving and validation
+  // This prevents interference with router-based username updates
 
   watch(compactView, (value) => {
     saveSetting('compactView', value)
@@ -88,10 +86,17 @@ export const useSettingsStore = defineStore('settings', () => {
   }
 
   async function setUsername(username) {
+    console.log('setUsername called with:', username)
+    console.log('Before: wikimediaUsername.value =', wikimediaUsername.value)
+
     wikimediaUsername.value = username
     saveSetting('wikimediaUsername', username)
-    // Update isWikimedian when username is set
+
+    console.log('After: wikimediaUsername.value =', wikimediaUsername.value)
+
+    // Validate username and update isWikimedian
     isWikimedian.value = await wikimediaUsernameExists(username)
+    console.log('isWikimedian =', isWikimedian.value)
   }
 
   function loadSetting(key, defaultValue) {

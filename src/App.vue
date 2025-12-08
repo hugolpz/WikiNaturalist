@@ -1,6 +1,6 @@
 <script setup>
-import TopBar from './components/TopBar.vue'
-import AppFooter from './components/AppFooter.vue'
+import TopBar from '@/components/TopBar.vue'
+import AppFooter from '@/components/AppFooter.vue'
 </script>
 
 <template>
