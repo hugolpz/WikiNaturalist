@@ -9,9 +9,13 @@
       <div class="topbar-actions">
         <UsernameInput />
         <LanguageSelect />
-        <CompactButton />
         <InstallButton />
-        <EditDataButton />
+        <CompactButton />
+        <EditDataButton
+          page="Special:MyPage/WikiNaturalist"
+          editintro="WikiNaturalist/Guideline"
+          preload="WikiNaturalist/Preload"
+        />
 
         <router-link to="/settings" class="settings-button" :title="$t('settings-title')">
           <svg
@@ -59,6 +63,9 @@ const homeRoute = computed(() => {
   top: 0;
   z-index: 100;
 }
+.topbar * {
+  color: inherit;
+}
 
 .topbar-container {
   max-width: 1400px;
@@ -72,7 +79,6 @@ const homeRoute = computed(() => {
 
 .topbar-title {
   text-decoration: none;
-  color: white;
 }
 
 .topbar-title h1 {
@@ -108,7 +114,6 @@ const homeRoute = computed(() => {
   background-color: rgba(255, 255, 255, 0.1);
   border-radius: 50%;
   transition: background-color 0.2s;
-  color: white;
   text-decoration: none;
 }
 

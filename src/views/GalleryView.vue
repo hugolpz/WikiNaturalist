@@ -16,12 +16,21 @@
         <div
           v-for="(collection, index) in collectionsData"
           :key="collection.collectionTitle"
-          :id="`collection-${index}`"
+          :id="`collection-${index + 1}`"
           class="collection-section"
         >
           <!-- collection Header -->
           <div class="collection-header">
-            <h2 class="collectionTitle">{{ collection.collectionTitle }}</h2>
+            <div class="collection-title-group">
+              <h2 class="collectionTitle">{{ collection.collectionTitle }}</h2>
+              <EditDataButton
+                style="color: grey"
+                :section="`${index + 1}`"
+                page="Special:MyPage/WikiNaturalist"
+                editintro="WikiNaturalist/Guideline"
+                editintro="WikiNaturalist/Preload"
+              />
+            </div>
             <div v-if="collection.lat && collection.lon" class="collection-coordinates">
               <span class="coordinates">
                 📍 {{ collection.lat.toFixed(2) }}, {{ collection.lon.toFixed(2) }}
@@ -58,6 +67,7 @@ import { useI18n } from 'vue-i18n'
 import { fetchDatalist } from '@/utils/fetchDatalist'
 import { useSettingsStore } from '@/stores/settings'
 import ItemCard from '@/components/ItemCard.vue'
+import EditDataButton from '@/components/EditDataButton.vue'
 import GlobeLocalisator from '@/components/GlobeLocalisator.vue'
 import CollectionNav from '@/components/CollectionNav.vue'
 
@@ -179,6 +189,7 @@ onMounted(async () => {
   display: flex;
   flex-direction: column;
   gap: 2rem;
+  color: #2c3e50;
 }
 
 .collection-section {
@@ -196,6 +207,12 @@ onMounted(async () => {
   margin-bottom: 2rem;
   padding-bottom: 1rem;
   border-bottom: 2px solid #e9ecef;
+}
+
+.collection-title-group {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
 }
 
 .collectionTitle {

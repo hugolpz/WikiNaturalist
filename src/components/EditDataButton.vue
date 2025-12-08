@@ -25,6 +25,29 @@ import { useSettingsStore } from '@/stores/settings'
 import { checkDatalistExists } from '@/utils/fetchDatalist'
 import { cdxIconEdit } from '@wikimedia/codex-icons'
 
+const props = defineProps({
+  page: {
+    type: String,
+    required: false,
+    default: '',
+  },
+  section: {
+    type: String,
+    required: false,
+    default: '',
+  },
+  editintro: {
+    type: String,
+    required: false,
+    default: '',
+  },
+  preload: {
+    type: String,
+    required: false,
+    default: '',
+  },
+})
+
 const settings = useSettingsStore()
 
 const hasUsername = computed(
@@ -48,14 +71,10 @@ watch(
 )
 
 const editUrl = computed(() => {
-  const baseUrl = `https://meta.wikimedia.org/w/index.php?title=Special:UserLogin&returnto=Special:MyPage/WikiNaturalist`
-  if (pageExists.value === true) {
-    // List page exists -> EDIT it with guideline intro
-    return `${baseUrl}&action=edit&veswitched=1&editintro=WikiNaturalist/Guideline`
-  } else {
-    // List page missing -> CREATE with template
-    return `${baseUrl}&action=edit&veswitched=1&editintro=WikiNaturalist/Guideline&preload=WikiNaturalist/Placeholder`
-  }
+  const baseUrl = `https://meta.wikimedia.org/w/index.php?title=Special:UserLogin&returnto=`
+  const returntoQuery = `action=edit&section=${props.section}&veswitched=1&editintro=${props.editintro}&preload=${props.preload}`
+  //if (pageExists.value === true ) {
+  return `${baseUrl}${encodeURIComponent(props.page)}&returntoquery=${encodeURIComponent(returntoQuery)}`
 })
 </script>
 
@@ -68,8 +87,8 @@ const editUrl = computed(() => {
   background-color: rgba(255, 255, 255, 0.1);
   border-radius: 50%;
   transition: background-color 0.2s;
-  color: white;
   text-decoration: none;
+  color: inherit;
 }
 
 .edit-data-button:hover {
