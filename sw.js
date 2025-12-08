@@ -1,13 +1,17 @@
 const CACHE_NAME = 'wikinaturalist-v1'
+
+// Determine base path from the service worker's location
+const BASE_PATH = self.location.pathname.substring(0, self.location.pathname.lastIndexOf('/') + 1)
+
 const STATIC_CACHE_URLS = [
-  '/',
-  '/index.html',
-  '/manifest.json',
-  '/assets/logo-192.png',
-  '/assets/logo2.webp',
-  '/assets/github.svg',
-  '/assets/wikidata.svg',
-  '/assets/wikipedia.svg',
+  `${BASE_PATH}`,
+  `${BASE_PATH}index.html`,
+  `${BASE_PATH}manifest.json`,
+  `${BASE_PATH}assets/logo-192.png`,
+  `${BASE_PATH}assets/logo2.webp`,
+  `${BASE_PATH}assets/github.svg`,
+  `${BASE_PATH}assets/wikidata.svg`,
+  `${BASE_PATH}assets/wikipedia.svg`,
 ]
 
 // Install event - cache static assets
@@ -89,7 +93,7 @@ self.addEventListener('fetch', (event) => {
 
           // Return offline page for navigation requests
           if (event.request.mode === 'navigate') {
-            return caches.match('/')
+            return caches.match(`${BASE_PATH}index.html`) || caches.match(BASE_PATH)
           }
 
           throw error
@@ -139,6 +143,6 @@ self.addEventListener('notificationclick', (event) => {
   event.notification.close()
 
   if (event.action === 'open' || !event.action) {
-    event.waitUntil(self.clients.openWindow('/'))
+    event.waitUntil(self.clients.openWindow(BASE_PATH))
   }
 })

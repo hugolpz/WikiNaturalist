@@ -5,7 +5,7 @@
   "start_url": "./",
   "display": "standalone",
   "background_color": "#80d080",
-  "theme_color": "#2c3e50",
+  "theme_color": "#80d080",
   "orientation": "portrait-primary",
   "categories": ["education", "utilities", "lifestyle"],
   "lang": "en",
@@ -79,9 +79,9 @@
   ],
   "screenshots": [
     {
-      "src": "/assets/logo3.jpeg",
+      "src": "/assets/logo-512.png",
       "sizes": "1280x720",
-      "type": "image/jpeg",
+      "type": "image/png",
       "form_factor": "wide"
     }
   ],
