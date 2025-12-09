@@ -3,9 +3,9 @@
     <a
       v-for="(collection, index) in collections"
       :key="`nav-${collection.collectionTitle}`"
-      :href="`#collection-${index}`"
+      :href="`#collection-${index + 1}`"
       class="collection-nav-link"
-      @click.prevent="scrollToCollection(index)"
+      @click.prevent="scrollToCollection(index + 1)"
     >
       <span class="nav-icon">🌿</span>
       <span class="nav-text">{{ collection.collectionTitle }}</span>
