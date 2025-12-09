@@ -7,22 +7,31 @@ const STATIC_CACHE_URLS = [
   `${BASE_PATH}`,
   `${BASE_PATH}index.html`,
   `${BASE_PATH}manifest.json`,
+  `${BASE_PATH}404.html`,
   `${BASE_PATH}assets/logo-192.png`,
-  `${BASE_PATH}assets/logo2.webp`,
+  `${BASE_PATH}assets/logo-512.png`,
   `${BASE_PATH}assets/github.svg`,
   `${BASE_PATH}assets/wikidata.svg`,
   `${BASE_PATH}assets/wikipedia.svg`,
+  `${BASE_PATH}assets/gbif.svg`,
 ]
 
 // Install event - cache static assets
 self.addEventListener('install', (event) => {
-  console.log('Service Worker installing')
+  console.log('Service Worker installing', 'BASE_PATH:', BASE_PATH)
   event.waitUntil(
     caches
       .open(CACHE_NAME)
       .then((cache) => {
-        console.log('Caching static assets')
-        return cache.addAll(STATIC_CACHE_URLS)
+        console.log('Caching static assets with BASE_PATH:', BASE_PATH)
+        // Cache files individually to identify failures
+        return Promise.all(
+          STATIC_CACHE_URLS.map((url) =>
+            cache.add(url).catch((error) => {
+              console.warn('Failed to cache:', url, error)
+            }),
+          ),
+        )
       })
       .catch((error) => {
         console.error('Error during install:', error)
@@ -93,7 +102,9 @@ self.addEventListener('fetch', (event) => {
 
           // Return offline page for navigation requests
           if (event.request.mode === 'navigate') {
-            return caches.match(`${BASE_PATH}index.html`) || caches.match(BASE_PATH)
+            return caches.match(`${BASE_PATH}index.html`).then((response) => {
+              return response || caches.match(`${BASE_PATH}404.html`) || caches.match(BASE_PATH)
+            })
           }
 
           throw error
@@ -116,20 +127,20 @@ self.addEventListener('push', (event) => {
 
   const options = {
     body: event.data ? event.data.text() : 'New content available!',
-    icon: '/assets/logo-192.png',
-    badge: '/assets/logo-96.png',
+    icon: `${BASE_PATH}assets/logo-192.png`,
+    badge: `${BASE_PATH}assets/logo-96.png`,
     vibrate: [200, 100, 200],
     tag: 'wikinaturalist-notification',
     actions: [
       {
         action: 'open',
         title: 'Open App',
-        icon: '/assets/logo-96.png',
+        icon: `${BASE_PATH}assets/logo-96.png`,
       },
       {
         action: 'close',
         title: 'Close',
-        icon: '/assets/logo-96.png',
+        icon: `${BASE_PATH}assets/logo-96.png`,
       },
     ],
   }

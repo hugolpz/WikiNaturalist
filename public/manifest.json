@@ -2,7 +2,8 @@
   "name": "WikiNaturalist",
   "short_name": "WikiNaturalist",
   "description": "Gallery of your biodiversity neighborhood, Wikimedia-boosted",
-  "start_url": "./",
+  "start_url": ".",
+  "scope": "./",
   "display": "standalone",
   "background_color": "#80d080",
   "theme_color": "#80d080",
@@ -11,67 +12,67 @@
   "lang": "en",
   "icons": [
     {
-      "src": "/assets/logo-16.png",
+      "src": "./assets/logo-16.png",
       "sizes": "16x16",
       "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "/assets/logo-32.png",
+      "src": "./assets/logo-32.png",
       "sizes": "32x32",
       "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "/assets/logo-48.png",
+      "src": "./assets/logo-48.png",
       "sizes": "48x48",
       "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "/assets/logo-64.png",
+      "src": "./assets/logo-64.png",
       "sizes": "64x64",
       "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "/assets/logo-72.png",
+      "src": "./assets/logo-72.png",
       "sizes": "72x72",
       "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "/assets/logo-96.png",
+      "src": "./assets/logo-96.png",
       "sizes": "96x96",
       "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "/assets/logo-128.png",
+      "src": "./assets/logo-128.png",
       "sizes": "128x128",
       "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "/assets/logo-192.png",
+      "src": "./assets/logo-192.png",
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "any maskable"
     },
     {
-      "src": "/assets/logo-256.png",
+      "src": "./assets/logo-256.png",
       "sizes": "256x256",
       "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "/assets/logo-512.png",
+      "src": "./assets/logo-512.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any maskable"
     },
     {
-      "src": "/favicon.ico",
+      "src": "./favicon.ico",
       "sizes": "16x16 32x32 48x48",
       "type": "image/x-icon",
       "purpose": "any"
@@ -79,7 +80,7 @@
   ],
   "screenshots": [
     {
-      "src": "/assets/logo-512.png",
+      "src": "./assets/logo-512.png",
       "sizes": "1280x720",
       "type": "image/png",
       "form_factor": "wide"
@@ -90,10 +91,10 @@
       "name": "Gallery",
       "short_name": "Gallery",
       "description": "View the species gallery",
-      "url": "/",
+      "url": "./",
       "icons": [
         {
-          "src": "/assets/logo-192.png",
+          "src": "./assets/logo-192.png",
           "sizes": "192x192",
           "type": "image/png"
         }
@@ -103,10 +104,10 @@
       "name": "Settings",
       "short_name": "Settings",
       "description": "Configure app settings",
-      "url": "/settings",
+      "url": "./settings",
       "icons": [
         {
-          "src": "/assets/logo-96.png",
+          "src": "./assets/logo-96.png",
           "sizes": "96x96",
           "type": "image/png"
         }
