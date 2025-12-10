@@ -12,6 +12,7 @@ export const useSettingsStore = defineStore('settings', () => {
   const showCardFooter = ref(loadSetting('showCardFooter', true))
   const wikimediaUsername = ref(loadSetting('wikimediaUsername', ''))
   const isWikimedian = ref(false)
+  const hasDatalist = ref(false)
 
   // Detect mobile and set default compact view
   const isMobile = window.innerWidth <= 768
@@ -99,6 +100,10 @@ export const useSettingsStore = defineStore('settings', () => {
     console.log('isWikimedian =', isWikimedian.value)
   }
 
+  function setHasDatalist(value) {
+    hasDatalist.value = value
+  }
+
   function loadSetting(key, defaultValue) {
     const stored = localStorage.getItem(key)
     return stored !== null ? JSON.parse(stored) : defaultValue
@@ -118,8 +123,10 @@ export const useSettingsStore = defineStore('settings', () => {
     showCardFooter,
     wikimediaUsername,
     isWikimedian,
+    hasDatalist,
     compactView,
     toggleCompactView,
     setUsername,
+    setHasDatalist,
   }
 })

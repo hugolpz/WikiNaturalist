@@ -3,7 +3,7 @@ import { watch } from 'vue'
 import GalleryView from '@/views/GalleryView.vue'
 import SettingsView from '@/views/SettingsView.vue'
 import { useSettingsStore } from '@/stores/settings'
-import { checkDatalistExists } from '@/utils/fetchDatalist'
+import { checkWikipageExists } from '@/utils/fetchDatalist'
 
 const router = createRouter({
   history: createWebHashHistory(import.meta.env.BASE_URL),
@@ -58,7 +58,8 @@ export async function navigateToUser(username) {
     return { success: true }
   }
 
-  const exists = await checkDatalistExists(trimmedUsername)
+  const pageTitle = `User:${trimmedUsername}/WikiNaturalist`
+  const exists = await checkWikipageExists(pageTitle)
 
   if (exists) {
     await settings.setUsername(trimmedUsername)

@@ -1,3 +1,5 @@
+import { useSettingsStore } from '@/stores/settings'
+
 const defaultDatalist = `
 == Spain ==
 # { lat: 43.0, lon: 1.17 }
@@ -22,13 +24,76 @@ const defaultDatalist = `
 `
 
 /**
- * Check if a user's WikiNaturalist datalist page exists on Meta Wikimedia
- * @param {string} username - The Wikimedia username
+ * Fetches the user's custom datalist from Wikimedia if available, or returns default
+ * This function consolidates the logic for checking existence and fetching data
+ * @param {string} username - Optional username to fetch datalist for. If not provided, uses settings store
+ * @returns {Promise<Array>} The datalist array
+ */
+export async function fetchDatalist(username = null) {
+  const settings = useSettingsStore()
+
+  // Determine which username to use
+  const targetUsername = username || settings.wikimediaUsername
+
+  // If no username, use default datalist from WikiNaturalist/Preload
+  if (!targetUsername || targetUsername.trim() === '') {
+    console.log('No Wikimedia username found, using default datalist from WikiNaturalist/Preload')
+    settings.setHasDatalist(false)
+    return parseWikitextDatalist(defaultDatalist)
+  }
+
+  console.log(`Fetching datalist for username: ${targetUsername}`)
+
+  try {
+    const pageTitle = `User:${targetUsername.replace(/"/g, '')}/WikiNaturalist`
+
+    // Use query API to check existence and get wikitext in one call
+    const url = `https://meta.wikimedia.org/w/api.php?action=query&titles=${encodeURIComponent(pageTitle)}&prop=revisions&rvprop=content&rvslots=main&format=json&origin=*`
+
+    const response = await fetch(url)
+    const data = await response.json()
+
+    // Check if page exists
+    const page = Object.values(data.query.pages)[0]
+    const pageExists = !page.missing && !page.invalid
+
+    // Update hasDatalist state
+    settings.setHasDatalist(pageExists)
+
+    if (!pageExists) {
+      console.log(`Page ${pageTitle} does not exist, using default datalist`)
+      return parseWikitextDatalist(defaultDatalist)
+    }
+
+    // Extract wikitext content
+    const wikitext = page.revisions[0].slots.main['*']
+    const filteredLines = wikitextFilter(wikitext)
+    const listsData = parseWikitextDatalist(filteredLines)
+
+    if (listsData && listsData.length > 0) {
+      console.log('Using custom collection-based datalist from Wikimedia')
+      return listsData
+    }
+
+    console.log('Custom datalist is empty, using default')
+    return parseWikitextDatalist(defaultDatalist)
+  } catch (error) {
+    console.error('Error fetching datalist:', error)
+    settings.setHasDatalist(false)
+    return parseWikitextDatalist(defaultDatalist)
+  }
+}
+
+/**
+ * Check if a wiki page exists on Meta Wikimedia
+ * This function is now a convenience wrapper that uses the settings store
+ * @param {string} pageTitle - The full page title (e.g., "User:Username/WikiNaturalist")
  * @returns {Promise<boolean>} True if page exists, false otherwise
  */
-export async function checkDatalistExists(username) {
+export async function checkWikipageExists(pageTitle) {
+  const settings = useSettingsStore()
+
   try {
-    const pageTitle = `User:${username}/WikiNaturalist`
     const url = `https://meta.wikimedia.org/w/api.php?action=query&titles=${encodeURIComponent(pageTitle)}&format=json&origin=*`
 
     const response = await fetch(url)
@@ -36,91 +101,19 @@ export async function checkDatalistExists(username) {
 
     // Page exists if it's not marked as "missing"
     const page = Object.values(data.query.pages)[0]
-    return !page.missing
+    const exists = !page.missing
+
+    // Update state if checking current user's WikiNaturalist page
+    const currentUserPage = `User:${settings.wikimediaUsername}/WikiNaturalist`
+    if (pageTitle === currentUserPage) {
+      settings.setHasDatalist(exists)
+    }
+
+    return exists
   } catch (error) {
-    console.error('Error checking datalist existence:', error)
+    console.error('Error checking page existence:', error)
     return false
   }
-}
-
-/**
- * Fetches the user's custom datalist from Wikimedia if available
- * @returns {Promise<Array>} The datalist array (custom collections data or default datalist wrapped)
- */
-export async function fetchDatalist() {
-  try {
-    // First, try to get the username from Wikimedia
-    const username = await getWikimediaUsername()
-
-    if (!username) {
-      console.log('No Wikimedia username found, using default datalist')
-      return parseWikitextDatalist(defaultDatalist)
-    }
-
-    console.log(`Found Wikimedia username: ${username}`)
-
-    // Try to fetch the user's custom datalist (collection-based format)
-    const customcollectionsData = await fetchUserDatalist(username)
-
-    if (customcollectionsData) {
-      console.log('Using custom collection-based datalist from Wikimedia')
-      return customcollectionsData
-    }
-
-    console.log('No valid custom datalist found, using default')
-  } catch (error) {
-    console.error('Error fetching datalist:', error)
-  }
-
-  // Fallback to default datalist (used for both no custom data and errors)
-  return parseWikitextDatalist(defaultDatalist)
-}
-
-/**
- * Gets the current Wikimedia username if logged in
- * Since CORS requests don't include auth cookies, we'll assume anonymous
- * and allow users to manually specify their username in localStorage
- * @returns {Promise<string|null>} The username or null
- */
-async function getWikimediaUsername() {
-  try {
-    // Check if user has manually set their username in localStorage
-    const manualUsername = localStorage.getItem('wikimediaUsername')
-    if (manualUsername) {
-      console.log(`Using manually set username: ${manualUsername}`)
-      return manualUsername
-    }
-
-    // Try the API call (will likely return anonymous due to CORS)
-    const url =
-      'https://meta.wikimedia.org/w/api.php?action=query&meta=userinfo&format=json&origin=*'
-
-    const response = await fetch(url)
-    const data = await response.json()
-
-    if (data.query && data.query.userinfo) {
-      const userinfo = data.query.userinfo
-      // Check if user is logged in (anon users have 'anon' flag or IP address as name)
-      if (userinfo.anon === undefined && userinfo.name && !isIPAddress(userinfo.name)) {
-        return userinfo.name
-      }
-    }
-
-    return null
-  } catch (error) {
-    console.error('Error fetching Wikimedia username:', error)
-    return null
-  }
-}
-
-/**
- * Check if a string looks like an IP address
- */
-function isIPAddress(str) {
-  // Simple check for IPv4 and IPv6 patterns
-  const ipv4Pattern = /^\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}$/
-  const ipv6Pattern = /^[0-9a-fA-F:]+$/
-  return ipv4Pattern.test(str) || ipv6Pattern.test(str)
 }
 
 /**
@@ -136,35 +129,6 @@ function wikitextFilter(wikitext) {
       return trimmed.startsWith('=') || trimmed.startsWith('*') || trimmed.startsWith('#')
     })
     .join('\n')
-}
-
-/**
- * Fetches and parses the user's datalist from their Wikimedia user page
- * @param {string} username - The Wikimedia username
- * @returns {Promise<Array|null>} The parsed datalist or null if invalid
- */
-async function fetchUserDatalist(username) {
-  try {
-    const pageTitle = `User:${username.replace(/"/g, '')}/WikiNaturalist`
-    const url = `https://meta.wikimedia.org/w/api.php?action=parse&page=${encodeURIComponent(pageTitle)}&prop=wikitext&format=json&origin=*`
-
-    const response = await fetch(url)
-    const data = await response.json()
-
-    // Check if page exists
-    if (data.error || !data.parse || !data.parse.wikitext) {
-      console.log(`Page ${pageTitle} does not exist`)
-      return null
-    }
-    const wikitext = data.parse.wikitext['*']
-    const filteredLines = wikitextFilter(wikitext)
-    const listsData = parseWikitextDatalist(filteredLines)
-
-    return listsData
-  } catch (error) {
-    console.error('Error fetching user datalist:', error)
-    return null
-  }
 }
 
 /**

@@ -20,9 +20,8 @@
 </template>
 
 <script setup>
-import { computed, ref, watch } from 'vue'
+import { computed } from 'vue'
 import { useSettingsStore } from '@/stores/settings'
-import { checkDatalistExists } from '@/utils/fetchDatalist'
 import { cdxIconEdit } from '@wikimedia/codex-icons'
 
 const props = defineProps({
@@ -52,22 +51,6 @@ const settings = useSettingsStore()
 
 const hasUsername = computed(
   () => settings.wikimediaUsername && settings.wikimediaUsername.trim() !== '',
-)
-
-const pageExists = ref(null) // null = checking, true = exists, false = doesn't exist
-
-// Watch for username changes and check page existence
-watch(
-  hasUsername,
-  async (newHasUsername) => {
-    if (newHasUsername) {
-      pageExists.value = null // Set to checking state
-      pageExists.value = await checkDatalistExists(settings.wikimediaUsername)
-    } else {
-      pageExists.value = null
-    }
-  },
-  { immediate: true },
 )
 
 const editUrl = computed(() => {
