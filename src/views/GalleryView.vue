@@ -226,8 +226,8 @@ watch(
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 2rem;
-  padding-bottom: 1rem;
+  margin-bottom: 0.7rem;
+  padding-bottom: 0.3rem;
   border-bottom: 2px solid #e9ecef;
 }
 
@@ -249,7 +249,11 @@ watch(
   align-items: center;
   gap: 1rem;
 }
-
+.collection-coordinates {
+  margin-bottom: -1em;
+  z-index: 4;
+  position: sticky;
+}
 .collection-globe {
   flex-shrink: 0;
 }
@@ -294,7 +298,6 @@ watch(
   }
 
   .collection-header {
-    flex-direction: column;
     align-items: flex-start;
     gap: 1rem;
   }

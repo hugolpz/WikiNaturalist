@@ -8,25 +8,24 @@
         </router-link>
       </div>
 
-      <div class="settings-section">
-        <h3>{{ $t('wikimedia-integration-title') }}</h3>
-        <p class="settings-description">{{ $t('wikimedia-integration-description') }}</p>
+      <div id="settings-section-accounts" class="settings-section">
+        <h3>{{ $t('settings-accounts-title') }}</h3>
 
         <div class="username-input">
           <label for="wikimedia-username" class="input-label">
-            {{ $t('wikimedia-username-label') }}:
+            {{ $t('settings-accounts-wikimedia-label') }}:
           </label>
           <input
             id="wikimedia-username"
             v-model="settings.wikimediaUsername"
             type="text"
             class="username-field"
-            :placeholder="$t('wikimedia-username-placeholder')"
+            :placeholder="$t('settings-accounts-wikimedia-placeholder')"
           />
         </div>
       </div>
 
-      <div class="settings-section">
+      <div id="settings-section-visiblity" class="settings-section">
         <h3>{{ $t('settings-visibility-title') }}</h3>
         <p class="settings-description">{{ $t('settings-visibility-description') }}</p>
 
@@ -126,14 +125,21 @@ const settings = useSettingsStore()
 }
 
 .back-button {
-  color: #36c;
+  color: white;
+  background-color: #36c;
   text-decoration: none;
   font-size: 1rem;
-  transition: color 0.2s;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  font-weight: 500;
+  transition:
+    background-color 0.2s,
+    transform 0.2s;
 }
 
 .back-button:hover {
-  color: #25a;
+  background-color: #25a;
+  transform: translateX(-2px);
 }
 
 .settings-section {
@@ -234,7 +240,6 @@ const settings = useSettingsStore()
   }
 
   .settings-header {
-    flex-direction: column;
     align-items: flex-start;
     gap: 1rem;
   }

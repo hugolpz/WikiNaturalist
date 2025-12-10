@@ -1,5 +1,5 @@
 <template>
-  <header class="topbar">
+  <header class="topbar" :class="{ 'topbar--compact': settings.compactView }">
     <div class="topbar-container">
       <router-link :to="homeRoute" class="topbar-title">
         <h1>{{ $t('app-title') }}</h1>
@@ -98,6 +98,10 @@ const homeRoute = computed(() => {
 
 .topbar-title:hover h1 {
   opacity: 0.8;
+}
+
+.topbar--compact .topbar-title {
+  display: none;
 }
 
 .topbar-actions {

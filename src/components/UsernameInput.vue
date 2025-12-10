@@ -25,7 +25,7 @@
           'cdx-text-input--status-warning': hasUsername && !settings.isWikimedian,
           'cdx-text-input--has-start-icon': hasUsername && !settings.isWikimedian,
         }"
-        :placeholder="hasUsername ? '' : $t('wikimedia-username-input-prompt')"
+        :placeholder="hasUsername ? '' : $t('settings-accounts-wikimedia-placeholder')"
         :readonly="!isEditing"
         :title="hasUsername && !settings.isWikimedian ? $t('error-no-wikimedian-account') : ''"
         @click="startEditing"

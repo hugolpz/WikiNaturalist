@@ -32,12 +32,9 @@ const i18n = createI18n({
       'link-edit-list-logged-in': 'Edit your species list',
       'link-edit-list-logged-out': 'Login to Wikimedia to create a species list',
       'footer-made-by': 'Made by Hugo Lopez',
-      'wikimedia-integration-title': 'Wikimedia Integration',
-      'wikimedia-integration-description':
-        'Enter your Wikimedia username to load custom species lists',
-      'wikimedia-username-label': 'Wikimedia Username',
-      'wikimedia-username-placeholder': 'Enter your username (e.g., Yug)',
-      'wikimedia-username-input-prompt': 'Input your Wikimedia username',
+      'settings-accounts-title': 'Linked accounts',
+      'settings-accounts-wikimedia-label': 'Wikimedia',
+      'settings-accounts-wikimedia-placeholder': 'Your Wikimedia username (e.g., BeastsWatcher)',
     },
     fr: {
       'app-install': 'Installer',
@@ -67,11 +64,10 @@ const i18n = createI18n({
       'link-edit-list-logged-in': "Modifier votre liste d'espèces",
       'link-edit-list-logged-out': "Connexion à Wikimedia pour créer une liste d'espèces",
       'footer-made-by': 'Fait par Hugo Lopez',
-      'wikimedia-integration-title': 'Intégration Wikimedia',
-      'wikimedia-integration-description':
-        "Entrez votre nom d'utilisateur Wikimedia pour charger des listes d'espèces personnalisées",
-      'wikimedia-username-label': "Nom d'utilisateur Wikimedia",
-      'wikimedia-username-placeholder': "Entrez votre nom d'utilisateur (ex: Yug)",
+      'settings-accounts-title': 'Comptes associés',
+      'settings-accounts-wikimedia-label': 'Wikimédia',
+      'settings-accounts-wikimedia-placeholder':
+        "Votre nom d'utilisateur Wikimedia (ex: BeastsWatcher)",
       'wikimedia-username-input-prompt': "Saisissez votre nom d'utilisateur Wikimedia",
     },
     es: {
@@ -102,12 +98,10 @@ const i18n = createI18n({
       'link-edit-list-logged-in': 'Editar tu lista de especies',
       'link-edit-list-logged-out': 'Inicia sesión en Wikimedia para crear una lista de especies',
       'footer-made-by': 'Hecho por Hugo Lopez',
-      'wikimedia-integration-title': 'Integración Wikimedia',
-      'wikimedia-integration-description':
-        'Ingrese su nombre de usuario de Wikimedia para cargar listas de especies personalizadas',
-      'wikimedia-username-label': 'Nombre de usuario de Wikimedia',
-      'wikimedia-username-placeholder': 'Ingrese su nombre de usuario (ej: Yug)',
-      'wikimedia-username-input-prompt': 'Ingrese su nombre de usuario de Wikimedia',
+      'settings-accounts-title': 'Cuentas vinculadas',
+      'settings-accounts-wikimedia-label': 'Wikimedia',
+      'settings-accounts-wikimedia-placeholder':
+        'Su nombre de usuario de Wikimedia (ej: BeastsWatcher)',
     },
     zh: {
       'app-install': '安装',
@@ -136,11 +130,9 @@ const i18n = createI18n({
       'link-edit-list-logged-in': '编辑您的物种列表',
       'link-edit-list-logged-out': '登录维基媒体以创建物种列表',
       'footer-made-by': '由 Hugo Lopez 制作',
-      'wikimedia-integration-title': '维基媒体集成',
-      'wikimedia-integration-description': '输入您的维基媒体用户名以加载自定义物种列表',
-      'wikimedia-username-label': '维基媒体用户名',
-      'wikimedia-username-placeholder': '输入您的用户名 (例如: Yug)',
-      'wikimedia-username-input-prompt': '输入您的维基媒体用户名',
+      'settings-accounts-title': '关联账户',
+      'settings-accounts-wikimedia-label': '维基用户名',
+      'settings-accounts-wikimedia-placeholder': '您的维基媒体用户名 (例如: BeastsWatcher)',
     },
     ko: {
       'app-install': '설치',
@@ -169,12 +161,9 @@ const i18n = createI18n({
       'link-edit-list-logged-in': '종 목록 편집',
       'link-edit-list-logged-out': '위키미디어에 로그인하여 종 목록 생성',
       'footer-made-by': 'Hugo Lopez 제작',
-      'wikimedia-integration-title': '위키미디어 통합',
-      'wikimedia-integration-description':
-        '위키미디어 사용자명을 입력하여 사용자 정의 종 목록을 불러오세요',
-      'wikimedia-username-label': '위키미디어 사용자명',
-      'wikimedia-username-placeholder': '사용자명을 입력하세요 (예: Yug)',
-      'wikimedia-username-input-prompt': '위키미디어 사용자명을 입력하세요',
+      'settings-accounts-title': '연결된 계정',
+      'settings-accounts-wikimedia-label': '위키미디어',
+      'settings-accounts-wikimedia-placeholder': '위키미디어 사용자명 (예: BeastsWatcher)',
     },
     ja: {
       'app-title': 'インストール',
@@ -202,12 +191,9 @@ const i18n = createI18n({
       'link-edit-list-logged-in': 'あなたの種リストを編集',
       'link-edit-list-logged-out': 'ウィキメディアにログインして種リストを作成',
       'footer-made-by': 'Hugo Lopez 作',
-      'wikimedia-integration-title': 'ウィキメディア統合',
-      'wikimedia-integration-description':
-        'ウィキメディアのユーザー名を入力して、カスタム種リストを読み込みます',
-      'wikimedia-username-label': 'ウィキメディアユーザー名',
-      'wikimedia-username-placeholder': 'ユーザー名を入力してください（例：Yug）',
-      'wikimedia-username-input-prompt': 'ウィキメディアのユーザー名を入力してください',
+      'settings-accounts-title': 'リンクされたアカウント',
+      'settings-accounts-wikimedia-label': 'ウィキメディア',
+      'settings-accounts-wikimedia-placeholder': 'ウィキメディアのユーザー名（例：BeastsWatcher）',
     },
     pl: {
       'app-install': 'Zainstaluj',
@@ -236,12 +222,10 @@ const i18n = createI18n({
       'link-edit-list-logged-in': 'Edytuj swoją listę gatunków',
       'link-edit-list-logged-out': 'Zaloguj się do Wikimedii, aby utworzyć listę gatunków',
       'footer-made-by': 'Stworzony przez Hugo Lopez',
-      'wikimedia-integration-title': 'Integracja z Wikimedią',
-      'wikimedia-integration-description':
-        'Wprowadź swoją nazwę użytkownika Wikimedii, aby załadować niestandardowe listy gatunków',
-      'wikimedia-username-label': 'Nazwa użytkownika Wikimedii',
-      'wikimedia-username-placeholder': 'Wprowadź swoją nazwę użytkownika (np. Yug)',
-      'wikimedia-username-input-prompt': 'Wprowadź swoją nazwę użytkownika Wikimedii',
+      'settings-accounts-title': 'Powiązane konta',
+      'settings-accounts-wikimedia-label': 'Nazwa użytkownika',
+      'settings-accounts-wikimedia-placeholder':
+        'Twoja nazwa użytkownika Wikimedia (np. BeastsWatcher)',
     },
   },
 })

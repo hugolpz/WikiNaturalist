@@ -435,21 +435,36 @@ watch(locale, () => {
 
 .card-footer {
   display: flex;
+  flex-wrap: wrap;
   justify-content: center;
   align-items: center;
-  gap: 1rem;
+  gap: 0.75rem;
   padding: 0.75rem 1rem;
   background-color: #f0f0f0;
   border-top: 1px solid #e0e0e0;
   flex-shrink: 0;
   margin-top: auto;
+  min-height: 48px;
+}
+
+@media (max-width: 380px) {
+  .card-footer {
+    gap: 0.5rem;
+    padding: 0.5rem;
+  }
+}
+
+.card--compact .card-footer {
+  gap: 0.5rem;
+  padding: 0.5rem 0.75rem;
+  min-height: 40px;
 }
 
 .footer-link {
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 0.25rem;
+  padding: 0.1rem;
   border-radius: 4px;
   transition:
     background-color 0.2s ease,

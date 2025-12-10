@@ -46,11 +46,10 @@ const scrollToCollection = (index) => {
 /* Collection Navigation */
 .collection-nav {
   position: sticky;
-  top: 60px; /* Below TopBar */
-  z-index: 100;
+  top: 0; /* Stick to very top, overlap TopBar */
+  z-index: 101; /* sit above TopBar */
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   padding: 1rem;
-  margin: 0 0 2rem 0;
   display: flex;
   gap: 0.75rem;
   overflow-x: auto;
@@ -123,8 +122,7 @@ const scrollToCollection = (index) => {
 
 @media (max-width: 768px) {
   .collection-nav {
-    top: 50px; /* Adjusted for mobile TopBar */
-    margin: 0 0 1.5rem 0;
+    top: 0;
     padding: 0.75rem;
     gap: 0.5rem;
     border-radius: 0;
@@ -143,8 +141,7 @@ const scrollToCollection = (index) => {
 
 @media (max-width: 480px) {
   .collection-nav {
-    top: 50px;
-    padding: 0.5rem;
+    top: 0;
     gap: 0.4rem;
   }
 
