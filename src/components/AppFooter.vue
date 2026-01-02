@@ -10,7 +10,7 @@
 
       <div class="footer-right">
         <a
-          href="https://github.com/hugolpz/WikiNaturalist/"
+          href="https://github.com/hugolpz/wikidex/"
           target="_blank"
           rel="noopener noreferrer"
           class="github-link"

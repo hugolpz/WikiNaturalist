@@ -15,9 +15,9 @@ export default defineConfig(({ command, mode }) => {
 
   // Determine base URL based on build target
   // - Toolforge: root path (/)
-  // - GitHub Pages: subpath (/WikiNaturalist/)
+  // - GitHub Pages: subpath (/wikidex/)
   // - Development: root path (/)
-  const base = mode === 'toolforge' ? '/' : command === 'build' ? '/WikiNaturalist/' : '/'
+  const base = mode === 'toolforge' ? '/' : command === 'build' ? '/wikidex/' : '/'
 
   return {
     plugins,

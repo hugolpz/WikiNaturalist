@@ -112,11 +112,11 @@ jobs:
 
       - name: Clean Toolforge public_html directory
         run: |
-          ssh -T -i id_rsa -o StrictHostKeyChecking=no ${{ secrets.TOOLFORGE_USERNAME }}@${{ secrets.TOOLFORGE_HOST }} "cd /data/project/wikinaturalist/public_html && find . -mindepth 1 ! -name '.htaccess' -delete"
+          ssh -T -i id_rsa -o StrictHostKeyChecking=no ${{ secrets.TOOLFORGE_USERNAME }}@${{ secrets.TOOLFORGE_HOST }} "cd /data/project/wikidex/public_html && find . -mindepth 1 ! -name '.htaccess' -delete"
 
       - name: Deploy to Toolforge
         run: |
-          rsync -avz --no-perms --omit-dir-times --delete --exclude='.htaccess' -e "ssh -T -i id_rsa -o StrictHostKeyChecking=no" dist/ ${{ secrets.TOOLFORGE_USERNAME }}@${{ secrets.TOOLFORGE_HOST }}:/data/project/wikinaturalist/public_html/
+          rsync -avz --no-perms --omit-dir-times --delete --exclude='.htaccess' -e "ssh -T -i id_rsa -o StrictHostKeyChecking=no" dist/ ${{ secrets.TOOLFORGE_USERNAME }}@${{ secrets.TOOLFORGE_HOST }}:/data/project/wikidex/public_html/
 
       - name: Cleanup SSH Key
         if: always()

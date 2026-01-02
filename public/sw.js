@@ -1,4 +1,4 @@
-const CACHE_NAME = 'wikinaturalist-v1'
+const CACHE_NAME = 'wikidex-v1'
 
 // Determine base path from the service worker's location
 const BASE_PATH = self.location.pathname.substring(0, self.location.pathname.lastIndexOf('/') + 1)
@@ -130,7 +130,7 @@ self.addEventListener('push', (event) => {
     icon: `${BASE_PATH}assets/logo-192.png`,
     badge: `${BASE_PATH}assets/logo-96.png`,
     vibrate: [200, 100, 200],
-    tag: 'wikinaturalist-notification',
+    tag: 'wikidex-notification',
     actions: [
       {
         action: 'open',
@@ -145,7 +145,7 @@ self.addEventListener('push', (event) => {
     ],
   }
 
-  event.waitUntil(self.registration.showNotification('WikiNaturalist', options))
+  event.waitUntil(self.registration.showNotification('WikiDex', options))
 })
 
 // Notification click handling

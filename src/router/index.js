@@ -58,7 +58,7 @@ export async function navigateToUser(username) {
     return { success: true }
   }
 
-  const pageTitle = `User:${trimmedUsername}/WikiNaturalist`
+  const pageTitle = `User:${trimmedUsername}/WikiDex`
   const exists = await checkWikipageExists(pageTitle)
 
   if (exists) {

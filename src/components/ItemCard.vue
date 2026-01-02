@@ -186,7 +186,7 @@ const categoryEmoji = computed(() => getCategoryEmoji(currentCategory.value))
 const wikipediaUrl = computed(() => {
   if (!cardData.value?.binomialName) return '#'
   const lang = locale.value || 'en'
-  return `https://${lang}.wikipedia.org/api/rest_v1/page/mobile-html/${encodeURIComponent(cardData.value.binomialName.replace(/ /g, '_'))}`
+  return `https://${lang}.wikipedia.org/wiki/${encodeURIComponent(cardData.value.binomialName.replace(/ /g, '_'))}`
 })
 
 const shareUrl = computed(() => {

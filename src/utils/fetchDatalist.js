@@ -35,9 +35,9 @@ export async function fetchDatalist(username = null) {
   // Determine which username to use
   const targetUsername = username || settings.wikimediaUsername
 
-  // If no username, use default datalist from WikiNaturalist/Preload
+  // If no username, use default datalist from WikiDex/Preload
   if (!targetUsername || targetUsername.trim() === '') {
-    console.log('No Wikimedia username found, using default datalist from WikiNaturalist/Preload')
+    console.log('No Wikimedia username found, using default datalist from WikiDex/Preload')
     settings.setHasDatalist(false)
     return parseWikitextDatalist(defaultDatalist)
   }
@@ -45,7 +45,7 @@ export async function fetchDatalist(username = null) {
   console.log(`Fetching datalist for username: ${targetUsername}`)
 
   try {
-    const pageTitle = `User:${targetUsername.replace(/"/g, '')}/WikiNaturalist`
+    const pageTitle = `User:${targetUsername.replace(/"/g, '')}/WikiDex`
 
     // Use query API to check existence and get wikitext in one call
     const url = `https://meta.wikimedia.org/w/api.php?action=query&titles=${encodeURIComponent(pageTitle)}&prop=revisions&rvprop=content&rvslots=main&format=json&origin=*`
@@ -87,7 +87,7 @@ export async function fetchDatalist(username = null) {
 /**
  * Check if a wiki page exists on Meta Wikimedia
  * This function is now a convenience wrapper that uses the settings store
- * @param {string} pageTitle - The full page title (e.g., "User:Username/WikiNaturalist")
+ * @param {string} pageTitle - The full page title (e.g., "User:Username/WikiDex")
  * @returns {Promise<boolean>} True if page exists, false otherwise
  */
 export async function checkWikipageExists(pageTitle) {
@@ -103,8 +103,8 @@ export async function checkWikipageExists(pageTitle) {
     const page = Object.values(data.query.pages)[0]
     const exists = !page.missing
 
-    // Update state if checking current user's WikiNaturalist page
-    const currentUserPage = `User:${settings.wikimediaUsername}/WikiNaturalist`
+    // Update state if checking current user's WikiDex page
+    const currentUserPage = `User:${settings.wikimediaUsername}/WikiDex`
     if (pageTitle === currentUserPage) {
       settings.setHasDatalist(exists)
     }
@@ -121,7 +121,7 @@ export async function checkWikipageExists(pageTitle) {
  * @param {string} wikitext - The raw wikitext content
  * @returns {string} Filtered wikitext with only relevant lines
  */
-function wikitextFilter(wikitext) {
+export function wikitextFilter(wikitext) {
   return wikitext
     .split('\n')
     .filter((line) => {
@@ -147,7 +147,7 @@ function wikitextFilter(wikitext) {
  * @param {string} wikitext - The raw wikitext content
  * @returns {Array|null} Array of collection objects with structure: { collection, lat, lon, list } or null if invalid
  */
-function parseWikitextDatalist(wikitext) {
+export function parseWikitextDatalist(wikitext) {
   try {
     const lists = []
 
@@ -171,40 +171,37 @@ function parseWikitextDatalist(wikitext) {
 
       if (listItems.length === 0) continue
 
-      // First item should be coordinates in format { lat: X, lon: Y }
-      const coordItem = listItems[0]
+      // Detect coordinates anywhere in the items and remove any items that are coordinate objects { ... }
       let lat = null
       let lon = null
-      let itemList = []
+      const coordRegex = /\{\s*lat\s*:\s*([0-9.-]+)\s*,\s*lon\s*:\s*([0-9.-]+)\s*\}/
 
-      // Try to parse coordinates from first item
-      const coordMatch = coordItem.match(
-        /\{\s*lat\s*:\s*([0-9.-]+)\s*,\s*lon\s*:\s*([0-9.-]+)\s*\}/,
-      )
-      if (coordMatch) {
-        lat = parseFloat(coordMatch[1])
-        lon = parseFloat(coordMatch[2])
-        // Item list starts from second item
-        itemList = listItems.slice(1)
-      } else {
-        // No coordinates found, treat all items as entries
-        itemList = listItems
+      // If any list item contains coordinate object, extract first match
+      for (const itm of listItems) {
+        const m = itm.match(coordRegex)
+        if (m) {
+          lat = parseFloat(m[1])
+          lon = parseFloat(m[2])
+          break
+        }
       }
+      // Filter out any items that look like "{ ... }" so only species names remain
+      const itemList = listItems.filter((item) => !item.match(/^\{.+\}$/))
 
       // Convert item list to datalist format
-      const datalist = itemList
+      const names = itemList
         .filter((item) => item.length > 0)
         .map((item) => ({
           binomial: item.trim(),
         }))
 
       // Only add collection if it has items
-      if (datalist.length > 0) {
+      if (names.length > 0) {
         lists.push({
           collectionTitle: collectionName,
           lat: lat,
           lon: lon,
-          list: datalist,
+          list: names,
         })
       }
     }
@@ -216,5 +213,32 @@ function parseWikitextDatalist(wikitext) {
   }
 }
 
-// Export the collection-based parser and wikitext filter for potential standalone use
-export { parseWikitextDatalist, wikitextFilter }
+/**
+ * Fetches all taxa observed by a user from iNaturalist
+ * @param {string} username - The iNaturalist username
+ * @returns {Promise<Array<string>>} Array of scientific names
+ */
+export async function fetchINaturalistUserTaxa(username) {
+  let page = 1
+  const perPage = 500
+  let hasMore = true
+  const names = []
+
+  while (hasMore) {
+    const url = `https://api.inaturalist.org/v1/observations/species_counts?user_id=${username}&per_page=${perPage}&page=${page}`
+    const res = await fetch(url)
+    const data = await res.json()
+    // Extract scientific names
+    data.results.forEach((item) => {
+      if (item.taxon && item.taxon.name) {
+        names.push(item.taxon.name)
+      }
+    })
+    hasMore = data.results.length === perPage
+    page++
+  }
+  return {
+    collectionTitle: 'iNaturalist Observations',
+    list: names,
+  }
+}

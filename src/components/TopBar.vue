@@ -12,9 +12,9 @@
         <InstallButton />
         <CompactButton />
         <EditDataButton
-          page="Special:MyPage/WikiNaturalist"
-          editintro="WikiNaturalist/Guideline"
-          preload="WikiNaturalist/Preload"
+          page="Special:MyPage/WikiDex"
+          editintro="WikiDex/Guideline"
+          preload="WikiDex/Preload"
         />
 
         <router-link to="/settings" class="settings-button" :title="$t('settings-title')">

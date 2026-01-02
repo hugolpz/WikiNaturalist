@@ -26,9 +26,9 @@
               <EditDataButton
                 style="color: grey"
                 :section="`${index + 1}`"
-                page="Special:MyPage/WikiNaturalist"
-                editintro="WikiNaturalist/Guideline"
-                preload="WikiNaturalist/Placeholder"
+                page="Special:MyPage/WikiDex"
+                editintro="WikiDex/Guideline"
+                preload="WikiDex/Placeholder"
               />
             </div>
             <div v-if="collection.lat && collection.lon" class="collection-coordinates">

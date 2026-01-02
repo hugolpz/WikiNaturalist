@@ -1,4 +1,4 @@
-# WikiNaturalist 🌿
+# WikiDex 🌿
 
 Easily build a gallery of your neighborhood's biodiversity, wikipedia-powered, shareable and collaborative.
 
@@ -37,8 +37,8 @@ $ npm run lint          # Lint code
 
 ```bash
 $ git push              # Triggers automatic deployment
-# Builds with base: /WikiNaturalist/
-# Deploys to: https://hugolpz.github.io/WikiNaturalist/
+# Builds with base: /wikidex/
+# Deploys to: https://hugolpz.github.io/wikidex/
 ```
 
 **Toolforge** (automatic via GitHub Actions):
@@ -47,7 +47,7 @@ $ git push              # Triggers automatic deployment
 $ git push              # Triggers automatic deployment
 # Builds with base: / (root path)
 # Requires secrets: SSH_PRIVATE_KEY, TOOLFORGE_USERNAME, TOOLFORGE_HOST
-# Deploys to: https://wikinaturalist.toolforge.org/
+# Deploys to: https://wikidex.toolforge.org/
 ```
 
 **Manual Toolforge Build**:
@@ -83,11 +83,11 @@ public/
 
 ### Deployment Targets
 
-1. **GitHub Pages**: https://hugolpz.github.io/WikiNaturalist/
-   - Base path: `/WikiNaturalist/`
+1. **GitHub Pages**: https://hugolpz.github.io/wikidex/
+   - Base path: `/wikidex/`
    - Auto-deploys on push to `main`
 
-2. **Toolforge**: https://wikinaturalist.toolforge.org/
+2. **Toolforge**: https://wikidex.toolforge.org/
    - Base path: `/` (root)
    - Auto-deploys on push to `main`
    - Requires GitHub secrets configuration

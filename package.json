@@ -1,9 +1,9 @@
 {
-  "name": "wikinaturalist",
+  "name": "wikidex",
   "version": "0.0.0",
   "private": true,
   "type": "module",
-  "homepage": "https://hugolpz.github.io/WikiNaturalist",
+  "homepage": "https://hugolpz.github.io/wikidex",
   "engines": {
     "node": "^20.19.0 || >=22.12.0"
   },

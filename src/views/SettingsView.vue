@@ -11,7 +11,7 @@
       <div id="settings-section-accounts" class="settings-section">
         <h3>{{ $t('settings-accounts-title') }}</h3>
 
-        <div class="username-input">
+        <div id="settings-accounts-wikimedia" class="username-input">
           <label for="wikimedia-username" class="input-label">
             {{ $t('settings-accounts-wikimedia-label') }}:
           </label>

@@ -1,6 +1,6 @@
 {
-  "name": "WikiNaturalist",
-  "short_name": "WikiNaturalist",
+  "name": "WikiDex",
+  "short_name": "WikiDex",
   "description": "Gallery of your biodiversity neighborhood, Wikimedia-boosted",
   "start_url": ".",
   "scope": "./",
