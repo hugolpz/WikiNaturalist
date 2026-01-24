@@ -35,6 +35,8 @@ const i18n = createI18n({
       'settings-accounts-title': 'Linked accounts',
       'settings-accounts-wikimedia-label': 'Wikimedia',
       'settings-accounts-wikimedia-placeholder': 'Your Wikimedia username (e.g., BeastsWatcher)',
+      'settings-userscript-message':
+        'For a much smoother experience on Wikipedia, <a href="https://meta.wikimedia.org/w/index.php?title=Special:MyPage/global.js&editintro=WikiNaturalist%2FUserscript&action=edit">add the forager userscript</a>, then follow the red squirrel.',
     },
     fr: {
       'app-install': 'Installer',
@@ -69,6 +71,8 @@ const i18n = createI18n({
       'settings-accounts-wikimedia-placeholder':
         "Votre nom d'utilisateur Wikimedia (ex: BeastsWatcher)",
       'wikimedia-username-input-prompt': "Saisissez votre nom d'utilisateur Wikimedia",
+      'settings-userscript-message':
+        'Pour une expérience beaucoup plus fluide sur Wikipedia, <a href="https://meta.wikimedia.org/wiki/Special:MyPage/global.js&editintro=WikiNaturalist%2FUserscript">ajoutez le script utilisateur forager</a>, puis suivez l\'écureuil rouge.',
     },
     es: {
       'app-install': 'Instalar',
@@ -102,6 +106,8 @@ const i18n = createI18n({
       'settings-accounts-wikimedia-label': 'Wikimedia',
       'settings-accounts-wikimedia-placeholder':
         'Su nombre de usuario de Wikimedia (ej: BeastsWatcher)',
+      'settings-userscript-message':
+        'Para una experiencia mucho más fluida en Wikipedia, <a href="https://meta.wikimedia.org/wiki/Special:MyPage/global.js&editintro=WikiNaturalist%2FUserscript">agregue el script de usuario forager</a>, luego siga a la ardilla roja.',
     },
     zh: {
       'app-install': '安装',
@@ -133,6 +139,8 @@ const i18n = createI18n({
       'settings-accounts-title': '关联账户',
       'settings-accounts-wikimedia-label': '维基用户名',
       'settings-accounts-wikimedia-placeholder': '您的维基媒体用户名 (例如: BeastsWatcher)',
+      'settings-userscript-message':
+        '为了在维基百科上获得更流畅的体验，<a href="https://meta.wikimedia.org/wiki/Special:MyPage/global.js&editintro=WikiNaturalist%2FUserscript">添加forager用户脚本</a>，然后跟随红松鼠。',
     },
     ko: {
       'app-install': '설치',
@@ -164,6 +172,8 @@ const i18n = createI18n({
       'settings-accounts-title': '연결된 계정',
       'settings-accounts-wikimedia-label': '위키미디어',
       'settings-accounts-wikimedia-placeholder': '위키미디어 사용자명 (예: BeastsWatcher)',
+      'settings-userscript-message':
+        '위키백과에서 훨씬 더 원활한 경험을 위해 <a href="https://meta.wikimedia.org/wiki/Special:MyPage/global.js&editintro=WikiNaturalist%2FUserscript">forager 사용자 스크립트를 추가</a>한 다음 빨간 다람쥐를 따라가세요.',
     },
     ja: {
       'app-title': 'インストール',
@@ -194,6 +204,8 @@ const i18n = createI18n({
       'settings-accounts-title': 'リンクされたアカウント',
       'settings-accounts-wikimedia-label': 'ウィキメディア',
       'settings-accounts-wikimedia-placeholder': 'ウィキメディアのユーザー名（例：BeastsWatcher）',
+      'settings-userscript-message':
+        'ウィキペディアでよりスムーズな体験をするために、<a href="https://meta.wikimedia.org/wiki/Special:MyPage/global.js&editintro=WikiNaturalist%2FUserscript">foragerユーザースクリプトを追加</a>してから、赤いリスを追ってください。',
     },
     pl: {
       'app-install': 'Zainstaluj',
@@ -226,6 +238,8 @@ const i18n = createI18n({
       'settings-accounts-wikimedia-label': 'Nazwa użytkownika',
       'settings-accounts-wikimedia-placeholder':
         'Twoja nazwa użytkownika Wikimedia (np. BeastsWatcher)',
+      'settings-userscript-message':
+        'Aby uzyskać znacznie płynniejsze doświadczenie w Wikipedii, <a href="https://meta.wikimedia.org/wiki/Special:MyPage/global.js&editintro=WikiNaturalist%2FUserscript">dodaj skrypt użytkownika forager</a>, a następnie podążaj za czerwoną wiewiórką.',
     },
   },
 })

@@ -23,6 +23,10 @@
             :placeholder="$t('settings-accounts-wikimedia-placeholder')"
           />
         </div>
+
+        <div class="userscript-message">
+          <p v-html="$t('settings-userscript-message')"></p>
+        </div>
       </div>
 
       <div id="settings-section-visiblity" class="settings-section">
@@ -228,6 +232,30 @@ const settings = useSettingsStore()
 .username-field:focus {
   outline: none;
   border-color: #36c;
+}
+
+.userscript-message {
+  margin-top: 1.5rem;
+  padding: 1rem;
+  background-color: #f0f8ff;
+  border-left: 4px solid #36c;
+  border-radius: 4px;
+}
+
+.userscript-message p {
+  margin: 0;
+  color: #333;
+  line-height: 1.6;
+}
+
+.userscript-message a {
+  color: #36c;
+  text-decoration: underline;
+  font-weight: 500;
+}
+
+.userscript-message a:hover {
+  color: #25a;
 }
 
 @media (max-width: 768px) {
