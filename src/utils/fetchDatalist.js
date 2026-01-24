@@ -1,4 +1,5 @@
 import { useSettingsStore } from '@/stores/settings'
+import i18n from '@/i18n'
 
 const defaultDatalist = `
 == Spain ==
@@ -47,27 +48,53 @@ export async function fetchDatalist(username = null) {
   try {
     const pageTitle = `User:${targetUsername.replace(/"/g, '')}/WikiDex`
 
-    // Use query API to check existence and get wikitext in one call
-    const url = `https://meta.wikimedia.org/w/api.php?action=query&titles=${encodeURIComponent(pageTitle)}&prop=revisions&rvprop=content&rvslots=main&format=json&origin=*`
+    // Get current locale from i18n
+    const currentLocale = i18n.global.locale.value
+    console.log(`[fetchDatalist] Current locale: ${currentLocale}`)
 
-    const response = await fetch(url)
-    const data = await response.json()
+    const sites = ['meta.wikimedia.org', `${currentLocale}.wikipedia.org`]
+    console.log(`[fetchDatalist] Checking WikiDex pages on sites: ${sites.join(', ')}`)
+    const urls = sites.map(
+      (item) =>
+        `https://${item}/w/api.php?action=query&titles=${encodeURIComponent(pageTitle)}&prop=revisions&rvprop=content&rvslots=main&format=json&origin=*`,
+    )
 
-    // Check if page exists
-    const page = Object.values(data.query.pages)[0]
-    const pageExists = !page.missing && !page.invalid
+    let wikitexts = ''
+    let pagesExist = []
 
-    // Update hasDatalist state
-    settings.setHasDatalist(pageExists)
+    for (const url of urls) {
+      try {
+        const response = await fetch(url)
+        const data = await response.json()
+        // Check if page exists
+        const page = Object.values(data.query.pages)[0]
+        const pageExists = !page.missing && !page.invalid
+        pagesExist.push(pageExists)
 
-    if (!pageExists) {
-      console.log(`Page ${pageTitle} does not exist, using default datalist`)
+        // Only add wikitext if page exists and has revisions
+        if (pageExists && page.revisions && page.revisions[0]) {
+          wikitexts += `\n\n{ source: ${currentLocale} }-->\n${page.revisions[0].slots.main['*']}\n`
+          console.log(`Fetched datalist from ${url}, page exists: true`)
+        } else {
+          console.log(`Fetched datalist from ${url}, page exists: false`)
+        }
+      } catch (err) {
+        console.warn(`Failed to fetch from ${url}:`, err)
+        pagesExist.push(false)
+      }
+    }
+
+    // Update hasDatalist state - true if at least one page exists
+    const hasAnyPage = pagesExist.some((exists) => exists === true)
+    settings.setHasDatalist(hasAnyPage)
+
+    if (!hasAnyPage || !wikitexts.trim()) {
+      console.log(`No WikiDex pages found for ${pageTitle}, using default datalist`)
       return parseWikitextDatalist(defaultDatalist)
     }
 
     // Extract wikitext content
-    const wikitext = page.revisions[0].slots.main['*']
-    const filteredLines = wikitextFilter(wikitext)
+    const filteredLines = wikitextFilter(wikitexts)
     const listsData = parseWikitextDatalist(filteredLines)
 
     if (listsData && listsData.length > 0) {
