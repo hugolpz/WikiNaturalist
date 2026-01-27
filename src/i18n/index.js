@@ -7,7 +7,8 @@ const i18n = createI18n({
   messages: {
     en: {
       'app-install': 'Install',
-      'app-title': 'WikiDex',
+      'app-title-wikinaturalist': 'WikiNaturalist',
+      'app-title-wikidex': 'WikiDex',
       'app-tagline': 'Gallery of your biodiversity neighborhood, Wikimedia-boosted.',
       'settings-title': 'Settings',
       'navigation-back-to-gallery': 'Back to Gallery',
@@ -40,7 +41,8 @@ const i18n = createI18n({
     },
     fr: {
       'app-install': 'Installer',
-      'app-title': 'Jardins Refuges',
+      'app-title-wikinaturalist': 'WikiNaturalist',
+      'app-title-wikidex': 'WikiDex',
       'app-tagline': 'Galerie de la biodiversité de votre quartier, boostée par Wikimedia.',
       'settings-title': 'Paramètres',
       'navigation-back-to-gallery': 'Retour à la galerie',
@@ -76,7 +78,8 @@ const i18n = createI18n({
     },
     es: {
       'app-install': 'Instalar',
-      'app-title': 'Jardines Refugios',
+      'app-title-wikinaturalist': 'WikiNaturalist',
+      'app-title-wikidex': 'WikiDex',
       'app-tagline': 'Galería de la biodiversidad de su barrio, potenciada por Wikimedia.',
       'settings-title': 'Configuración',
       'navigation-back-to-gallery': 'Volver a la galería',
@@ -111,7 +114,8 @@ const i18n = createI18n({
     },
     zh: {
       'app-install': '安装',
-      'app-title': '花园庇护所',
+      'app-title-wikinaturalist': 'WikiNaturalist',
+      'app-title-wikidex': 'WikiDex',
       'app-tagline': '您的社区生物多样性画廊，维基媒体加持。',
       'settings-title': '设置',
       'navigation-back-to-gallery': '返回画廊',
@@ -144,7 +148,8 @@ const i18n = createI18n({
     },
     ko: {
       'app-install': '설치',
-      'app-title': '정원 피난처',
+      'app-title-wikinaturalist': 'WikiNaturalist',
+      'app-title-wikidex': 'WikiDex',
       'app-tagline': '위키미디어로 강화된 당신의 동네 생물다양성 갤러리.',
       'settings-title': '설정',
       'navigation-back-to-gallery': '갤러리로 돌아가기',
@@ -176,7 +181,9 @@ const i18n = createI18n({
         '위키백과에서 훨씬 더 원활한 경험을 위해 <a href="https://meta.wikimedia.org/wiki/Special:MyPage/global.js&editintro=WikiNaturalist%2FUserscript">forager 사용자 스크립트를 추가</a>한 다음 빨간 다람쥐를 따라가세요.',
     },
     ja: {
-      'app-title': 'インストール',
+      'app-install': 'インストール',
+      'app-title-wikinaturalist': 'WikiNaturalist',
+      'app-title-wikidex': 'WikiDex',
       'app-tagline': 'あなたの地域の生物多様性ギャラリー、ウィキメディアでパワーアップ。',
       'settings-title': '設定',
       'navigation-back-to-gallery': 'ギャラリーに戻る',
@@ -209,7 +216,8 @@ const i18n = createI18n({
     },
     pl: {
       'app-install': 'Zainstaluj',
-      'app-title': 'Ogrody Schronienia',
+      'app-title-wikinaturalist': 'WikiNaturalist',
+      'app-title-wikidex': 'WikiDex',
       'app-tagline': 'Galeria bioróżnorodności Twojej okolicy, wzmocniona przez Wikimedię.',
       'settings-title': 'Ustawienia',
       'navigation-back-to-gallery': 'Powrót do galerii',

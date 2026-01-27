@@ -2,7 +2,8 @@
   <header class="topbar" :class="{ 'topbar--compact': settings.compactView }">
     <div class="topbar-container">
       <router-link :to="homeRoute" class="topbar-title">
-        <h1>{{ $t('app-title') }}</h1>
+        <h1 v-if="subdomainType === 'wikidex'">WikiDex</h1>
+        <h1 v-else>WikiNaturalist</h1>
         <p class="tagline">{{ $t('app-tagline') }}</p>
       </router-link>
 
@@ -52,6 +53,26 @@ const homeRoute = computed(() => {
   }
   return '/'
 })
+
+/**
+ * Detects which subdomain type the app is running on
+ * @returns {'wikinaturalist' | 'wikidex' | 'none'}
+ */
+const detectSubdomain = () => {
+  const hostname = window.location.hostname.toLowerCase()
+
+  if (hostname.includes('wikinaturalist')) {
+    return 'wikinaturalist'
+  } else if (hostname.includes('wikidex')) {
+    return 'wikidex'
+  } else {
+    return 'none'
+  }
+}
+
+// Get current subdomain type
+const subdomainType = detectSubdomain()
+console.log('[TopBar] Detected subdomain type:', subdomainType)
 </script>
 
 <style scoped>
